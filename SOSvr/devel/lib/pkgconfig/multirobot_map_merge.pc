@@ -1,0 +1,8 @@
+prefix=/home/user/workspace/sos/SOSvr/devel
+
+Name: multirobot_map_merge
+Description: Description of multirobot_map_merge
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/user/workspace/sos/SOSvr/devel/lib 
+Requires: 

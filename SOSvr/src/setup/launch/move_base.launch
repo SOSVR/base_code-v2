@@ -1,0 +1,19 @@
+<launch>
+  <arg name="robotname" default="sos1"/>
+<group ns="$(arg robotname)">
+
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+
+    <rosparam file="$(find setup)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find setup)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find setup)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find setup)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find setup)/config/base_local_planner_params.yaml" command="load" />
+    <remap from="scan" to="base_scan"/>
+    <remap from="/cmd_vel" to="cmd_vel"/>
+    <param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="1.0"/>
+    <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="1.0"/>
+
+  </node>
+</group>
+</launch>

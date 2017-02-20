@@ -1,0 +1,8 @@
+prefix=/home/user/workspace/sos/SOSvr/devel
+
+Name: setup
+Description: Description of setup
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/user/workspace/sos/SOSvr/devel/lib 
+Requires: nav_msgs roscpp rospy tf sensor_msgs cv_bridge std_msgs image_transport

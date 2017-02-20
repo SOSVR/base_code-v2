@@ -1,0 +1,6 @@
+<launch>
+     <arg name="robotx"/>
+     <arg name="robotx"/>
+     <arg name="robotname"/>
+    <node pkg="gazebo_ros" type="spawn_model" name="gazebo1"  args="-param $(arg robotname)_robot_description -urdf -z 0.6 -y $(arg roboty) -x $(arg robotx) -model $(arg robotname)" />
+</launch>
