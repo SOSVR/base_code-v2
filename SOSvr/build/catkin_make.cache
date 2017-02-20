@@ -1,0 +1,2 @@
+setup
+-DCATKIN_DEVEL_PREFIX=/home/user/workspace/sos/SOSvr/devel -DCMAKE_INSTALL_PREFIX=/home/user/workspace/sos/SOSvr/install -G Unix Makefiles

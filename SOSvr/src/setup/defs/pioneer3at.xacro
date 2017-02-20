@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<robot xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro"
+name="pioneer3at">
+
+<include filename="$(find setup)/defs/pioneer3at_body.xacro"/>
+
+
+
+
+
+     <xacro:hokuyo_ust20lx laser_prefix="$(optenv LASER1_PREFIX base)" parent="$(optenv VECTOR_PARENT_LINK top_plate)">
+        <origin xyz="$(optenv LASER1_XYZ 0.2 -0.1 0.02)" rpy="$(optenv LASER1_RPY 3.14159 0 0)" />
+    </xacro:hokuyo_ust20lx>
+    <xacro:pgr_flea3 camera_prefix="$(optenv LASER1_PREFIX base)" parent="$(optenv VECTOR_PARENT_LINK top_plate)">
+       <origin xyz="$(optenv LASER1_XYZ 0.2 0.1 0.02)" rpy="$(optenv LASER1_RPY 0 0 0)" />
+   </xacro:pgr_flea3>
+
+
+
+
+<xacro:p3at_front suffix="left" reflect="1"/>
+<xacro:p3at_front suffix="right" reflect="-1"/>
+<xacro:p3at_back suffix="left" reflect="1"/>
+<xacro:p3at_back suffix="right" reflect="-1"/>
+<xacro:p3at_gazebo_ext/>
+
+
+</robot>

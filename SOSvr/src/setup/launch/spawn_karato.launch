@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<launch>
+
+
+  <arg name="robotname" default="sos1"/>
+  <arg name="initialx" default="0.0"/>
+  <arg name="initialy" default="0.0"/>
+  <arg name="number" default="1"/>
+
+
+  <group ns="$(arg robotname)">
+        <param name="robot_id" value="$(arg number)" />
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find setup)/defs/pioneer3at.xacro prefix:=$(arg robotname)" />
+    <param name="tf_prefix" type="string" value="$(arg robotname)"/>
+
+    <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+      <param name="publish_frequency" type="double" value="15.0" />
+      <param name="tf_prefix" type="string" value="$(arg robotname)" />
+    </node>
+
+    <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
+      <param name="use_gui" value="false" />
+    </node>
+    <node pkg="gazebo_ros" type="spawn_model" name="gazebo1"  args="-param robot_description -urdf -z 0.4 -y $(arg initialy) -x $(arg initialx) -model $(arg robotname)" />
+   <!--node pkg="setup" type="odom_and_tf_node" name="odomtf" output="screen" args="$(arg robotname)"/-->
+   <rosparam file="$(find nav2d_tutorials)/param/ros.yaml"/>
+
+   <node name="Mapper" pkg="nav2d_karto" type="mapper">
+         <remap from="scan" to="base_scan"/>
+         <remap from="karto_in" to="/shared_scans_r1"/>
+         <remap from="karto_out" to="/shared_scans_r2"/>
+         <rosparam file="$(find nav2d_tutorials)/param/mapper.yaml"/>
+     </node>
+      <node name="R0_MapAlign" pkg="tf" type="static_transform_publisher" args="$(arg initialx) $(arg initialy) 0 0 0 0 /map $(arg robotname)/map 100"/>
+
+  </group>
+
+
+
+</launch>

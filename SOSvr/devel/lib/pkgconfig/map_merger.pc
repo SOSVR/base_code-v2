@@ -1,0 +1,8 @@
+prefix=/home/user/workspace/sos/SOSvr/devel
+
+Name: map_merger
+Description: Description of map_merger
+Version: 0.1.6
+Cflags: -I/home/user/workspace/sos/SOSvr/devel/include
+Libs: -L/home/user/workspace/sos/SOSvr/devel/lib 
+Requires: message_runtime adhoc_communication nav_msgs roscpp

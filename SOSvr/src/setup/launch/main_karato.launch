@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+         <arg name="world_name" value="$(find jackal_gazebo)/worlds/jackal_race.world"/>
+
+  </include>
+
+  <param name="use_sim_time" value="true" />
+
+  <include file="$(find setup)/launch/spawn_karato.launch">
+    <arg name="robotname" value="sos1"/>
+    <arg name="initialx" value="0"/>
+    <arg name="initialy" value="4"/>
+    <arg name="number" value="1"/>
+
+  </include>
+  <include file="$(find setup)/launch/spawn_karato.launch">
+    <arg name="robotname" value="sos2"/>
+    <arg name="initialx" value="0"/>
+    <arg name="initialy" value="0"/>
+    <arg name="number" value="2"/>
+
+  </include>
+
+
+</launch>

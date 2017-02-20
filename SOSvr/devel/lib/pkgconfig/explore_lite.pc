@@ -1,0 +1,8 @@
+prefix=/home/user/workspace/sos/SOSvr/devel
+
+Name: explore_lite
+Description: Description of explore_lite
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/user/workspace/sos/SOSvr/devel/lib 
+Requires: 

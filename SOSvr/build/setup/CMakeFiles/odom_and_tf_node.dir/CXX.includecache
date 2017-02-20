@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/user/workspace/sos/SOSvr/src/setup/src/odom2tf.cpp
+ros/ros.h
+-
+tf/transform_broadcaster.h
+-
+nav_msgs/Odometry.h
+-
+string
+-
+iostream
+-
+
