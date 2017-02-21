@@ -1,0 +1,15 @@
+   
+
+node ke migam yani odomtf ke khodam zadam
+
+
+khob gmapping aslan be in node niazy nadare gampping map be odom ro mide model odom be base ro
+     vali hector age odom base ro model bede  va map odom ro kamel 0 bedim 90 darsad oke
+     khob baad az koli dardesar natije ine ke fek konam fek konam fek konam shayad (in faghat ye ehtemal) map be odom dar vaghe bordar makanie ke ebtedash markaze
+     mokhtasate vali entehash noghte vasate base linke yani amalan nemitone bege model dare kodom samt ro negah mikone vali x y z ono moshakhas mikone
+     va baad odom be base jahat giri ro  
+
+
+
+
+nokte in ke age hector ro ham bedon node va ba tf haye default model va ... run konim larzesh model in rviz bara chand saniye baad az harkete ....1 ya 2 saniye baad az istadane model larzeshesh mire

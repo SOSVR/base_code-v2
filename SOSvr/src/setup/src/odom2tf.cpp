@@ -36,7 +36,7 @@ int main(int argc, char** argv){
  robotname=ns+"/odom";
   odom_trans_two.header.frame_id = "map";
   odom_trans_two.child_frame_id = robotname;
-  ros::Rate r(150);
+  ros::Rate r(250);
   while(n.ok()){
 
     ros::spinOnce();
@@ -54,14 +54,18 @@ int main(int argc, char** argv){
 
     odom_trans.transform.translation.x = mydata.pose.pose.position.x;
     odom_trans.transform.translation.y = mydata.pose.pose.position.y;
-    odom_trans.transform.translation.z = mydata.pose.pose.position.z;
-    odom_trans.transform.rotation= mydata.pose.pose.orientation;
+    odom_trans.transform.translation.z =mydata.pose.pose.position.z;
+    odom_trans.transform.rotation=mydata.pose.pose.orientation;
 
-
-    odom_trans_two.transform.translation.x =0.03;// mydata.pose.pose.position.x;
-    odom_trans_two.transform.translation.y = -3.9;//mydata.pose.pose.position.y;
+     //khob gmapping aslan be in node niazy nadare gampping map be odom ro mide model odom be base ro
+     //vali hector age odom base ro model bede  va map odom ro kamel 0 bedim 90 darsad oke
+     //khob baad az koli dardesar natije ine ke fek konam fek konam fek konam shayad (in faghat ye ehtemal) map be odom dar vaghe bordar makanie ke ebtedash markaze
+     // mokhtasate vali entehash noghte vasate base linke yani amalan nemitone bege model dare kodom samt ro negah mikone vali x y z ono moshakhas mikone
+     // va baad odom be base jahat giri ro  
+    odom_trans_two.transform.translation.x =0;// mydata.pose.pose.position.x;
+    odom_trans_two.transform.translation.y =0;// mydata.pose.pose.position.y;
     odom_trans_two.transform.translation.z =0;// mydata.pose.pose.position.z;
-    odom_trans_two.transform.rotation.x=0;// mydata.pose.pose.orientation;
+    odom_trans_two.transform.rotation.x=0;//mydata.pose.pose.orientation;
     odom_trans_two.transform.rotation.y=0;
     odom_trans_two.transform.rotation.z=0;
     odom_trans_two.transform.rotation.w=1;

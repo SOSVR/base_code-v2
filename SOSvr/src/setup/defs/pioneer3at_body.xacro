@@ -506,7 +506,7 @@
     <torque>200</torque>
     <topicName>cmd_vel</topicName>
     <odometryTopic>odom</odometryTopic>
-    <broadcastTF>0</broadcastTF>
+    <broadcastTF>1</broadcastTF>
     <odometryFrame>odom</odometryFrame>
 
   </plugin>
