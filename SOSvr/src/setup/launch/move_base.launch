@@ -11,8 +11,8 @@
     <rosparam file="$(find setup)/config/base_local_planner_params.yaml" command="load" />
     <remap from="scan" to="base_scan"/>
     <remap from="/cmd_vel" to="cmd_vel"/>
-    <param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="1.0"/>
-    <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="1.0"/>
+    <param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="0.1"/>
+    <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="0.2"/>
 
   </node>
 </group>
