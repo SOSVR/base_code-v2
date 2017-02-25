@@ -41,7 +41,7 @@
 
 
 
-<node pkg="rviz" type="rviz" name="rviz" args="-d $(find setup)/rviz/myconfig.rviz"/>
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find setup)/rviz/myconfig.rviz" />
 
 
 

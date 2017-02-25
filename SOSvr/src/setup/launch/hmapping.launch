@@ -10,9 +10,9 @@
     <param name="map_pub_period" value="2.0"/>
     <param name="map_resolution" value="0.05"/>
     <param name="laser_min_dist" value="0.05"/>
-    <param name="laser_max_dist" value="20.0"/>
-    <param name="map_update_distance_thresh" value="0.1"/>
-    <param name="map_update_angle_thresh" value="0.1" />
+    <param name="laser_max_dist" value="25.0"/>
+    <param name="map_update_distance_thresh" value="0.05"/>
+    <param name="map_update_angle_thresh" value="0.07" />
     <param name="laser_z_min_value" value="-1.0" />
     <param name="laser_z_max_value" value="1.0" />
     <param name="pub_map_odom_transform" value="false"/>

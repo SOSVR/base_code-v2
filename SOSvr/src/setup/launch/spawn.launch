@@ -23,13 +23,13 @@
     <node pkg="joint_state_publisher" type="joint_state_publisher" name="joint_state_publisher">
       <param name="use_gui" value="false" />
     </node>
-    <node pkg="gazebo_ros" type="spawn_model" name="gazebo1"  args="-param robot_description -urdf -z 0.4 -y $(arg initialy) -x $(arg initialx) -model $(arg robotname)" />
+    <node pkg="gazebo_ros" type="spawn_model" name="gazebo1"  args="-param robot_description -urdf -z 0.05 -y $(arg initialy) -x $(arg initialx) -model $(arg robotname)" />
     <!--node pkg="setup" type="odom_and_tf_node" name="odomtf" output="screen" args="$(arg robotname)"/-->
     <node pkg="fake_localization" type="fake_localization" name="fake_localization" >
       <param name="odom_frame_id" value="$(arg robotname)/odom"/>
       <param name="base_frame_id" value="$(arg robotname)/base_link"/>
        <remap from="base_pose_ground_truth" to="odom" />
-       
+
     </node>
 
     <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="teleop1"  />
