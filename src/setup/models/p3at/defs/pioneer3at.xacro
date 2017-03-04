@@ -6,7 +6,7 @@
        xmlns:xacro="http://ros.org/wiki/xacro"
 name="pioneer3at">
 
-<include filename="$(find setup)/defs/pioneer3at_body.xacro"/>
+<include filename="$(find setup)/models/p3at/defs/pioneer3at_body.xacro"/>
 
 
 

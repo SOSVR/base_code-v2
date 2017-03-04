@@ -20,7 +20,7 @@
 		<visual name="base_visual">
 			<origin xyz="0 0 0.177" rpy="0 0 0"/>
 			<geometry name="pioneer_geom">
-				<mesh filename="package://setup/meshes/chassis.stl"/>
+				<mesh filename="package://setup/models/p3at/meshes/chassis.stl"/>
 			</geometry>
 			<material name="ChassisRed">
 				<color rgba="0.851 0.0 0.0 1.0"/>
@@ -29,7 +29,7 @@
 		<collision>
 			<origin xyz="0 0 0.177" rpy="0 0 0"/>
 				<geometry>
-					<mesh filename="package://setup/meshes/chassis.stl"/>
+					<mesh filename="package://setup/models/p3at/meshes/chassis.stl"/>
 				</geometry>
 		</collision>
 	</link>
@@ -49,7 +49,7 @@
 		<visual name="base_visual">
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry name="pioneer_geom">
-				<mesh filename="package://setup/meshes/top.stl"/>
+				<mesh filename="package://setup/models/p3at/meshes/top.stl"/>
 			</geometry>
 			<material name="TopBlack">
 					<color rgba="0.038 0.038 0.038 1.0"/>
@@ -82,7 +82,7 @@
 		<visual name="base_visual">
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry name="pioneer_geom">
-				<mesh filename="package://setup/meshes/front_sonar.stl"/>
+				<mesh filename="package://setup/models/p3at/meshes/front_sonar.stl"/>
 			</geometry>
 			<material name="SonarYellow">
 				<color rgba="0.715 0.583 0.210 1.0"/>
@@ -115,7 +115,7 @@
 		<visual name="base_visual">
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry name="pioneer_geom">
-				<mesh filename="package://setup/meshes/back_sonar.stl"/>
+				<mesh filename="package://setup/models/p3at/meshes/back_sonar.stl"/>
 			</geometry>
 			<material name="SonarYellow">
 				<color rgba="0.715 0.583 0.210 1.0"/>
@@ -150,7 +150,7 @@
 	<visual name="base_visual">
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry name="pioneer_geom">
-			<mesh filename="package://setup/meshes/axle.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/axle.stl"/>
 		</geometry>
 		<material name="AxleGrey">
 			<color rgba="0.5 0.5 0.5 1"/>
@@ -183,7 +183,7 @@
 	<visual name="base_visual">
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry name="pioneer_geom">
-			<mesh filename="package://setup/meshes/${suffix}_hubcap.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/${suffix}_hubcap.stl"/>
 		</geometry>
 		<material name="HubcapYellow">
 			<color rgba="1.0 0.811 0.151 1.0"/>
@@ -216,7 +216,7 @@
 	<visual name="base_visual">
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry name="pioneer_geom">
-			<mesh filename="package://setup/meshes/wheel.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/wheel.stl"/>
 		</geometry>
 		<material name="WheelBlack">
 			<color rgba="0.117 0.117 0.117 1"/>
@@ -256,7 +256,7 @@
 	<visual name="base_visual">
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry name="pioneer_geom">
-			<mesh filename="package://setup/meshes/axle.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/axle.stl"/>
 		</geometry>
 		<material name="AxleGrey">
 			<color rgba="0.5 0.5 0.5 1"/>
@@ -265,7 +265,7 @@
 	<collision>
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry>
-			<mesh filename="package://setup/meshes/axle.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/axle.stl"/>
 		</geometry>
 	</collision>
 	</link>
@@ -290,14 +290,14 @@
 	<visual name="base_visual">
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry name="pioneer_geom">
-			<mesh filename="package://setup/meshes/${suffix}_hubcap.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/${suffix}_hubcap.stl"/>
 		</geometry>
 		<material name="HubcapYellow"/>
 	</visual>
 	<collision>
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry>
-			<mesh filename="package://setup/meshes/${suffix}_hubcap.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/${suffix}_hubcap.stl"/>
 		</geometry>
 	</collision>
 	</link>
@@ -321,7 +321,7 @@
 	<visual name="base_visual">
 		<origin xyz="0 0 0" rpy="0 0 0"/>
 		<geometry name="pioneer_geom">
-			<mesh filename="package://setup/meshes/wheel.stl"/>
+			<mesh filename="package://setup/models/p3at/meshes/wheel.stl"/>
 		</geometry>
 		<material name="WheelBlack"/>
 	</visual>

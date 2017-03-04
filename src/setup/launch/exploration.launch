@@ -12,8 +12,8 @@
 
       <param name="goal_aliasing" value="10.0"/>
 
-      <rosparam file="$(find setup)/config/costmap_common_params.yaml" command="load" ns="explore_costmap" />
-      <rosparam file="$(find setup)/config/costmap_exploration_params.yaml" command="load" ns="explore_costmap" />
+      <rosparam file="$(find setup)/move_base/config/costmap_common_params.yaml" command="load" ns="explore_costmap" />
+      <rosparam file="$(find setup)/move_base/config/costmap_exploration_params.yaml" command="load" ns="explore_costmap" />
 
     </node>
     <node pkg="frontier_exploration" type="frontier_creater" name="frontier_creater" output="screen" args="8"/>
