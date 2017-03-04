@@ -1,8 +1,0 @@
-prefix=/home/user/workspace/sos/SOSvr/devel
-
-Name: adhoc_communication
-Description: Description of adhoc_communication
-Version: 0.1.6
-Cflags: -I/home/user/workspace/sos/SOSvr/devel/include
-Libs: -L/home/user/workspace/sos/SOSvr/devel/lib 
-Requires: message_runtime
