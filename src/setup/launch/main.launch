@@ -10,7 +10,7 @@
     <arg name="initialy" value="0"/>
   </include>
 
-  <include file="$(find setup)/launch/gmapping.launch">
+  <include file="$(find setup)/launch/hmapping.launch">
     <arg name="robotname" value="sos1"/>
   </include>
 
@@ -18,17 +18,20 @@
     <arg name="robotname" value="sos1"/>
   </include>
 
-  <!--include file="$(find setup)/launch/spawn.launch">
+  <include file="$(find setup)/launch/spawn.launch">
     <arg name="robotname" value="sos2"/>
-    <arg name="initialx" value="0"/>
-    <arg name="initialy" value="0"/>
+    <arg name="initialx" value="-1"/>
+    <arg name="initialy" value="3"/>
 
   </include>
   <include file="$(find setup)/launch/hmapping.launch">
     <arg name="robotname" value="sos2"/>
   </include>
 
-  <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+  <include file="$(find setup)/launch/move_base.launch">
+    <arg name="robotname" value="sos2"/>
+  </include>
+  <!--node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
       <param name="robot_map_topic" value="map"/>
       <param name="robot_namespace" value=""/>
       <param name="merged_map_topic" value="/map"/>

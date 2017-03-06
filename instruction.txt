@@ -20,6 +20,11 @@ nokte in ke age hector ro ham bedon node va ba tf haye default model va ... run 
    a node jadid neveshtam ke ye adade x migire ye morabae be zele 2x va markaze 1,1 bara frontier exploratrion misaze
 
 
+/////////////////
+Mar 6th 2017 18:30 
+   while captain is sleeping here i have made some minor changes to the launch files for proper structure suggested by captian taher also i have added our own version of hushy created and edited by Mostafa
+ i have also added the m-explore package which needs opencv3 and i have not worked with this packge yet
+ the most important part ..... some minor changes have been made to ensure reliabale multi agent performence and interestingly on gazebo 5 you can have much higher realtime factor than on gazebo 2
 
 
 
