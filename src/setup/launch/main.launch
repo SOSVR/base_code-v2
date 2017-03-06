@@ -31,15 +31,12 @@
   <include file="$(find setup)/launch/move_base.launch">
     <arg name="robotname" value="sos2"/>
   </include>
-  <!--node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
-      <param name="robot_map_topic" value="map"/>
-      <param name="robot_namespace" value=""/>
-      <param name="merged_map_topic" value="/map"/>
-      <param name="world_frame" value="/map"/>
-      <param name="known_init_poses" value="true"/>
-      <param name="merging_rate" value="6.0"/>
-      <param name="discovery_rate" value="0.05"/>
-    </node-->
+
+
+  
+  <include file="$(find setup)/launch/map_merger.launch">
+  </include>
+
 
 
 

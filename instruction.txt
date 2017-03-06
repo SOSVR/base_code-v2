@@ -25,7 +25,13 @@ Mar 6th 2017 18:30
    while captain is sleeping here i have made some minor changes to the launch files for proper structure suggested by captian taher also i have added our own version of hushy created and edited by Mostafa
  i have also added the m-explore package which needs opencv3 and i have not worked with this packge yet
  the most important part ..... some minor changes have been made to ensure reliabale multi agent performence and interestingly on gazebo 5 you can have much higher realtime factor than on gazebo 2
-f
+
+
+Mar 6th 2017 19:50
+  dude we had so many problem with gazebo 2 and its realtime factor 
+ in fact when i spawned 2 robots with move base real time factor would be between 80 and 90 running with map merger would make it 60 to 75
+ now with gazebo 5 we can run 2 models with move base and map merger with a real time factor of 95
+   the main thing that was done in this commin was addition of map merger launch file and adding its functionality 
 
 
 
