@@ -34,5 +34,5 @@ Mar 6th 2017 19:50
    the main thing that was done in this commin was addition of map merger launch file and adding its functionality 
 
 
-
+Mar 7th move-base launchs on little husky
 }
