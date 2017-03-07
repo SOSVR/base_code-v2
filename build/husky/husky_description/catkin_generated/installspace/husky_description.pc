@@ -1,8 +1,0 @@
-prefix=/home/mostafa/taherAhmadi/IranOpen2017/install
-
-Name: husky_description
-Description: Description of husky_description
-Version: 0.2.7
-Cflags: 
-Libs: -L/home/mostafa/taherAhmadi/IranOpen2017/install/lib 
-Requires: 

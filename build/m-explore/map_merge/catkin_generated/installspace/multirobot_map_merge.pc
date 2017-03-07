@@ -1,8 +1,0 @@
-prefix=/home/mostafa/taherAhmadi/IranOpen2017/install
-
-Name: multirobot_map_merge
-Description: Description of multirobot_map_merge
-Version: 1.0.0
-Cflags: 
-Libs: -L/home/mostafa/taherAhmadi/IranOpen2017/install/lib 
-Requires: 

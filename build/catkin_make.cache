@@ -1,2 +1,0 @@
-frontier_exploration:husky/husky_control:husky/husky_description:husky/husky_msgs:husky/husky_navigation:husky/husky_ur5_moveit_config:husky_simulator/husky_gazebo:husky_simulator/husky_simulator:m-explore/explore:m-explore/map_merge:setup
--DCATKIN_DEVEL_PREFIX=/home/mostafa/taherAhmadi/IranOpen2017/devel -DCMAKE_INSTALL_PREFIX=/home/mostafa/taherAhmadi/IranOpen2017/install -G Unix Makefiles
