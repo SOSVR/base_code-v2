@@ -11,4 +11,5 @@
   </include>
 
 <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+ <include file="$(find husky_navigation)/launch/gmapping_demo.launch" />
 </launch>
