@@ -1,0 +1,8 @@
+prefix=/home/mostafa/taherAhmadi/IranOpen2017/devel
+
+Name: husky_navigation
+Description: Description of husky_navigation
+Version: 0.2.7
+Cflags: 
+Libs: -L/home/mostafa/taherAhmadi/IranOpen2017/devel/lib 
+Requires: 

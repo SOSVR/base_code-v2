@@ -1,0 +1,8 @@
+prefix=/home/mostafa/taherAhmadi/IranOpen2017/devel
+
+Name: husky_gazebo
+Description: Description of husky_gazebo
+Version: 0.2.6
+Cflags: 
+Libs: -L/home/mostafa/taherAhmadi/IranOpen2017/devel/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/home/mostafa/taherAhmadi/IranOpen2017/devel
+
+Name: explore_lite
+Description: Description of explore_lite
+Version: 1.0.0
+Cflags: 
+Libs: -L/home/mostafa/taherAhmadi/IranOpen2017/devel/lib 
+Requires: 

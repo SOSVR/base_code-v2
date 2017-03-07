@@ -1,0 +1,8 @@
+prefix=/home/mostafa/taherAhmadi/IranOpen2017/devel
+
+Name: husky_msgs
+Description: Description of husky_msgs
+Version: 0.2.7
+Cflags: -I/home/mostafa/taherAhmadi/IranOpen2017/devel/include
+Libs: -L/home/mostafa/taherAhmadi/IranOpen2017/devel/lib 
+Requires: std_msgs message_runtime
