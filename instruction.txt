@@ -40,6 +40,8 @@ Mar 7th move-base launchs on little husky
 Mar 26th 2017 6:26
    made extensive tunnings to the move base parameters and making DWAplanner operational with exceptional performance also finaly our husky modified by Mostafa is ready and we have worked with parameter and launch files of husky and we have made them standard and operational so basicly now we have launch files for husky and its movebase 
 
+/////
+27 March
 
 
 
