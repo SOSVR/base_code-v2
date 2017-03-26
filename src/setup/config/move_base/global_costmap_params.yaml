@@ -1,10 +1,14 @@
 global_costmap:
   global_frame: /map
   robot_base_frame: base_link
-  update_frequency: 12
-  publish_frequency: 3
+  update_frequency: 10
+  publish_frequency: 5
   static_map: false
-  width: 30.0
-  height: 30.0
-  origin_x: -15.0
-  origin_y: -15.0
+  rolling_window: true
+  width: 20.0
+  height: 20.0
+  origin_x: -20.0
+  origin_y: -20.0
+  plugins:
+  - {name: obstacles_layer, type: "costmap_2d::ObstacleLayer"}
+  - {name: inflater_layer, type: "costmap_2d::InflationLayer"}

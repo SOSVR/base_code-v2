@@ -4,8 +4,6 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
 <arg name="world_name" value="$(find husky_gazebo)/worlds/clearpath_playpen.world"/>
 </include>
-
-  
  <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
     <arg name="laser_enabled" value="true"/>
     <arg name="ur5_enabled" value="false"/>
