@@ -4,26 +4,26 @@
 
   <param name="use_sim_time" value="true" />
 
-  <include file="$(find setup)/launch/Husky_launch/spawn.launch">
-    <arg name="robotname" value="husky1"/>
+  <include file="$(find setup)/launch/Husky_launch/husky_spawn.launch">
+    <arg name="robotname" value="sos1"/>
     <arg name="initialx" value="-10"/>
     <arg name="initialy" value="-10"/>
   </include>
 
-  <!--include file="$(find setup)/launch/hmapping.launch">
-    <arg name="robotname" value="sos1"/>
+  <!--include file="$(find setup)/launch/husky_hmapping.launch">
+    <arg name="robotname" value="husky1"/>
     <arg name="initialx" value="-10"/>
     <arg name="initialy" value="-10"/>
   </include-->
 
-  <include file="$(find setup)/launch/Husky_launch/gmapping.launch">
-    <arg name="robotname" value="husky1"/>
+  <include file="$(find setup)/launch/Husky_launch/husky_gmapping.launch">
+    <arg name="robotname" value="sos1"/>
   </include>
 
 
 
-  <include file="$(find setup)/launch/Husky_launch/move_base.launch">
-    <arg name="robotname" value="husky1"/>
+  <include file="$(find setup)/launch/Husky_launch/husky_move_base.launch">
+    <arg name="robotname" value="sos1"/>
   </include>
     <!--include file="$(find setup)/launch/spawn.launch">
     <arg name="robotname" value="sos2"/>
