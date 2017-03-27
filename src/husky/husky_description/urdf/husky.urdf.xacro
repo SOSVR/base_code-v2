@@ -134,7 +134,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
         <origin xyz="$(optenv LASER1_XYZ 0.1 0 0.03)" rpy="$(optenv LASER1_RPY 3.14159 0 0)" />
     </xacro:hokuyo_ust20lx>
     <xacro:pgr_flea3 camera_prefix="$(optenv LASER1_PREFIX base)" parent="$(optenv VECTOR_PARENT_LINK base)">
-       <origin xyz="$(optenv LASER1_XYZ 0 0 -0.05)" rpy="$(optenv LASER1_RPY 0 0 0)" />
+       <origin xyz="$(optenv LASER1_XYZ 0 0 -0.05)" rpy="$(optenv LASER1_RPY 3.14159 0 0)" />
    </xacro:pgr_flea3>
 
     </xacro:macro>
@@ -144,7 +144,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
     <updateRate>100.0</updateRate>
-    <robotNamespace></robotNamespace>
     <leftFrontJoint>front_left_wheel</leftFrontJoint>
     <rightFrontJoint>front_right_wheel</rightFrontJoint>
     <leftRearJoint>rear_left_wheel</leftRearJoint>

@@ -1,5 +1,5 @@
 <launch>
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" default="$(find setup)/worlds/my_world.world"/>
+    <arg name="world_name" default="$(find setup)/worlds/super_world.world"/>
   </include>
 </launch>
