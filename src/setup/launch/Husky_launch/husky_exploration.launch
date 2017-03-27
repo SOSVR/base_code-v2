@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robotname" default="sos1"/>
+  <group ns="$(arg robotname)">
+    <node pkg="frontier_exploration" type="explore_client" name="explore_client" output="screen"/>
+
+    <node pkg="frontier_exploration" type="explore_server" name="explore_server" output="screen">
+
+      <param name="frequency" value="1.0"/>
+
+      <!-- Should be less than sensor range -->
+      <param name="goal_aliasing" value="17.0"/>
+
+      <rosparam file="$(find setup)/config/Husky_move_base/costmap_common_params.yaml" command="load" ns="explore_costmap" />
+      <rosparam file="$(find setup)/config/Husky_move_base/costmap_exploration_params.yaml" command="load" ns="explore_costmap" />
+
+    </node>
+
+  </group>
+</launch>
