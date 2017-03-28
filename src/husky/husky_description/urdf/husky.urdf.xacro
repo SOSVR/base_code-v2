@@ -149,7 +149,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <leftRearJoint>rear_left_wheel</leftRearJoint>
     <rightRearJoint>rear_right_wheel</rightRearJoint>
     <wheelSeparation>0.2854</wheelSeparation>
-    <wheelDiameter>0.2</wheelDiameter>
+    <wheelDiameter>0.177</wheelDiameter>
     <robotBaseFrame>base_link</robotBaseFrame>
     <torque>100</torque>
     <topicName>cmd_vel</topicName>
