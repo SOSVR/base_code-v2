@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>rqt_sosvr_controller</name>
+  <version>1.0.0</version>
+  <description>The SOSVR Controller package</description>
+  <maintainer email="mohammadi.mohamadamin@gmail.com">vr</maintainer>
+  <license>Apache V2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rqt_gui</build_depend>
+  <build_depend>rqt_gui_py</build_depend>
+  <run_depend>rqt_gui</run_depend>
+  <run_depend>rqt_gui_py</run_depend>
+  
+  <export>
+    <rqt_gui plugin="${prefix}/plugin.xml"/>
+  </export>
+</package>

@@ -7,7 +7,6 @@ transform_tolerance: 0.5
 rolling_window: true
 static_map: false
 resolution: 0.05
-
 obstacle_range: 6.5
 raytrace_range: 7.0
 plugins:
@@ -21,5 +20,5 @@ obstacles_layer:
   laser_scan_sensor: {sensor_frame: base_laser_link, data_type: LaserScan, topic: base_scan, marking: true, clearing: true, raytrace_range: 7.5, obstacle_range: 6.5}
   track_unknown_space: true
 inflater_layer:
- inflation_radius: 1.2
- cost_scaling_factor: 2.58
+  inflation_radius: 1.2
+  cost_scaling_factor: 2.58

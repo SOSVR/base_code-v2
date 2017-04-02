@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<sdf version="1.5">
+  <world name="default">
+    <gui>
+      <camera name='user_default'>
+        <pose>16 0 12 0 0.6 -3.141</pose>
+      </camera>
+    </gui>
+
+  <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+     <include>
+      <uri>model://sun</uri>
+    </include>
+ 
+    <light type="directional" name="my_light0">
+      <pose>0 0 30 0 0 0</pose>
+      <diffuse>0.5 0.5 0.5 1</diffuse>
+      <specular>0.1 0.1 0.1 1</specular>
+      <direction>0.1 0.1 -0.9</direction>
+      <attenuation>
+        <range>20</range>
+        <linear>0.01</linear>
+        <constant>0.5</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <cast_shadows>1</cast_shadows>
+    </light>
+
+
+<!--  Portmessa Nagoya (The RoboCup 2017 venue) -->
+    <include>
+      <static>1</static>
+      <uri>model://portmessa</uri>
+    </include>
+
+
+  </world>
+</sdf>

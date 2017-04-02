@@ -1,0 +1,19 @@
+<library path="src">
+  <class name="SOSVR Controller" type="rqt_sosvr_controller.my_module.MyPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>A plugin for controlling SOSVR robots
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>SOSVR Contoller</label>
+      <icon type="theme">gtk-properties</icon>
+      <statustip>Great user interface to provide real value.</statustip>
+    </qtgui>
+  </class>
+</library>

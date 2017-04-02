@@ -14,6 +14,11 @@
     <param name="maxUrange" value="24" />
     <param name="maxRange" value="25.4" />
 
+    <param name="xmin" value="-20" />
+    <param name="xmax" value="20" />
+    <param name="ymax" value="20" />
+    <param name="ymin" value="-20" />
+
   </node>
 </group>
 </launch>

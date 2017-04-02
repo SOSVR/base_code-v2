@@ -7,9 +7,7 @@
 
   
  <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-    <arg name="laser_enabled" value="true"/>
-    <arg name="ur5_enabled" value="false"/>
-    <arg name="kinect_enabled" value="true"/>
+  
   </include>
 
 

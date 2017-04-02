@@ -5,10 +5,12 @@ project(setup)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  costmap_2d
   nav_msgs
   roscpp
   rospy
   tf
+  geometry_msgs
   sensor_msgs
   cv_bridge
   std_msgs
@@ -105,7 +107,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- CATKIN_DEPENDS nav_msgs roscpp rospy tf sensor_msgs cv_bridge std_msgs image_transport
+ CATKIN_DEPENDS nav_msgs roscpp rospy tf sensor_msgs cv_bridge std_msgs image_transport  geometry_msgs costmap_2d
 #  INCLUDE_DIRS include
 #  LIBRARIES setup
 #  CATKIN_DEPENDS other_catkin_pkg
@@ -134,8 +136,10 @@ catkin_package(
 # add_executable(setup_node src/setup_node.cpp)
  add_executable(odom_and_tf_node src/odom2tf.cpp)
  add_executable(image_node src/image.cpp)
+ add_executable(inital_pose src/initial_pose_publisher.cpp)
  target_link_libraries(odom_and_tf_node ${catkin_LIBRARIES} )
  target_link_libraries(image_node ${catkin_LIBRARIES} )
+ target_link_libraries(inital_pose ${catkin_LIBRARIES} )
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(setup_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

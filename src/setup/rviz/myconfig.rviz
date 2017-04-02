@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Map3
+        - /Path1
       Splitter Ratio: 0.5
     Tree Height: 293
   - Class: rviz/Selection
@@ -186,7 +187,7 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 4.86337e-36
+      Max Intensity: 999999
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: LaserScan
@@ -250,7 +251,7 @@ Visualization Manager:
       Radius: 0.03
       Shaft Diameter: 0.1
       Shaft Length: 0.1
-      Topic: /sos1/move_base/NavfnROS/plan
+      Topic: /sos1/move_base/DWAPlannerROS/global_plan
       Unreliable: false
       Value: true
     - Class: rviz/Marker
@@ -285,7 +286,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 24.4031
+      Distance: 22.9653
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
@@ -297,10 +298,10 @@ Visualization Manager:
         Z: 0
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.685398
+      Pitch: 0.925398
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.31858
+      Yaw: 4.89358
     Saved: ~
 Window Geometry:
   Displays:

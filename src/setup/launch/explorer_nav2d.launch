@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="robotname" default="sos1"/>
+  <node name="Navigator" pkg="nav2d_navigator" type="navigator">
+    <rosparam file="$(find setup)/config/navigation/navigator.yaml"/>
+    <remap from="scan" to="sos1/base_scan"/>
+    <param name="map_frame" value="map"/>
+    <param name="robot_frame" value="sos1/base_link"/>
+    <param name="navigation_homing_distance" value="1"/>
+    <param name="min_replanning_period" value="2"/>
+  </node>
+  <group ns="$(arg robotname)">
+
+	<node name="GetMap" pkg="nav2d_navigator" type="get_map_client" />
+	<node name="Explore" pkg="nav2d_navigator" type="explore_client" />
+<node name="SetGoal" pkg="nav2d_navigator" type="set_goal_client" />
+</group>
+
+</launch>

@@ -10,7 +10,6 @@
       <rosparam file="$(find setup)/config/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
       <rosparam file="$(find setup)/config/move_base/local_costmap_params.yaml" command="load" />
       <rosparam file="$(find setup)/config/move_base/global_costmap_params.yaml" command="load" />
-      <remap from="scan" to="base_scan"/>
       <remap from="/cmd_vel" to="cmd_vel"/>
       <!--param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="0.1"/>
       <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="0.2"/-->

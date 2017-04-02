@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+<arg name="robotname" default="sos1"/>
+<group ns="$(arg robotname)">
+<node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
+  <param name="robot_base_frame" value="base_link"/>
+  <param name="costmap_topic" value="move_base/local_costmap/costmap"/>
+  <param name="costmap_updates_topic" value="move_base/local_costmap/costmap_updates"/>
+  <param name="visualize" value="true"/>
+  <param name="planner_frequency" value="0.1"/>
+  <param name="progress_timeout" value="30.0"/>
+  <param name="potential_scale" value="0.005"/>
+  <param name="orientation_scale" value="0.0"/>
+  <param name="gain_scale" value="1.0"/>
+  <param name="transform_tolerance" value="0.5"/>
+</node>
+</group>
+
+</launch>

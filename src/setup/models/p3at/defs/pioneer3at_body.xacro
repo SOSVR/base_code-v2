@@ -397,10 +397,10 @@
             <ray>
                 <scan>
                     <horizontal>
-                    <samples>540</samples>
+                    <samples>720</samples>
                     <resolution>1</resolution>
-                    <min_angle>-1.2</min_angle>
-                    <max_angle>1.2</max_angle>
+                    <min_angle>-2.7</min_angle>
+                    <max_angle>2.7</max_angle>
                     </horizontal>
                 </scan>
                 <range>
@@ -451,14 +451,15 @@
     <gazebo reference="${camera_prefix}_camera_link">
         <sensor type="camera" name="${camera_prefix}_camera_sensor">
             <always_on>true</always_on>
-            <visualize>false</visualize>
+            <visualize>true</visualize>
             <update_rate>25.0</update_rate>
             <camera>
-                <horizontal_fov>1.3962634</horizontal_fov>
+                <!--horizontal_fov>1.3962634</horizontal_fov-->
+                <horizontal_fov>1.8962634</horizontal_fov>
                 <image>
                     <format>R8G8B8</format>
-                    <width>250</width>
-                    <height>250</height>
+                    <width>500</width>
+                    <height>200</height>
                 </image>
                 <clip>
                     <near>0.5</near>
@@ -467,7 +468,7 @@
             </camera>
             <plugin name="${camera_prefix}_camera_controller" filename="libgazebo_ros_camera.so">
                 <alwaysOn>true</alwaysOn>
-                <updateRate>25.0</updateRate>
+                <updateRate>20.0</updateRate>
                 <cameraName>${camera_prefix}_camera</cameraName>
                 <imageTopicName>${camera_prefix}_camera_image</imageTopicName>
                 <cameraInfoTopicName>${camera_prefix}_camera_info</cameraInfoTopicName>
@@ -476,7 +477,7 @@
                 <CxPrime>125.5</CxPrime>
                 <Cx>125.5</Cx>
                 <Cy>125.5</Cy>
-                <focalLength>317.772992</focalLength>
+                <focalLength>179.485489</focalLength>
                 <distortionK1>0.0</distortionK1>
                 <distortionK2>0.0</distortionK2>
                 <distortionK3>0.0</distortionK3>
@@ -505,6 +506,7 @@
     <robotBaseFrame>base_link</robotBaseFrame>
     <torque>200</torque>
     <topicName>cmd_vel</topicName>
+    <commandTopic>cmd_vel</commandTopic>
     <odometryTopic>odom</odometryTopic>
     <broadcastTF>1</broadcastTF>
     <odometryFrame>odom</odometryFrame>

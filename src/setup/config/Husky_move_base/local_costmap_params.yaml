@@ -3,8 +3,8 @@ local_costmap:
   robot_base_frame: base_link
   rolling_window: true
   static_map: false
-  width: 6.0
-  height: 6.0
+  width: 10.0
+  height: 10.0
 plugins:
   - {name: obstacles_laser,           type: "costmap_2d::ObstacleLayer"}
   - {name: inflation,                 type: "costmap_2d::InflationLayer"}

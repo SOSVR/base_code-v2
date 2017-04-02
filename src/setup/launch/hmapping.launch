@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="robotname" default="sos1"/>
+  <arg name="initialx" default="0"/>
+  <arg name="initialy" default="0"/>
 
   <group ns="$(arg robotname)">
 
 
+    <!--node pkg="setup" type="inital_pose" name="initial_pose_publisher" args="$(arg robotname) $(arg initialx) $(arg initialy)" /-->
 
 
-    
+
     <node pkg="fake_localization" type="fake_localization" name="fake_localization" >
       <param name="odom_frame_id" value="$(arg robotname)/odom"/>
       <param name="base_frame_id" value="$(arg robotname)/base_link"/>
@@ -16,12 +19,10 @@
     </node>
 
 
-
-
   <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" >
     <param name="map_start_x" value="0.5"/>
     <param name="map_start_y" value="0.5" />
-    <param name="map_size" value="900"/>
+    <param name="map_size" value="800"/>
     <param name="map_pub_period" value="2.0"/>
     <param name="map_resolution" value="0.05"/>
     <param name="laser_min_dist" value="0.05"/>
@@ -36,6 +37,8 @@
     <param name="base_frame" value="$(arg robotname)/base_link"/>
     <param name="odom_frame" value="$(arg robotname)/odom" />
     <remap from="scan" to="/$(arg robotname)/base_scan" />
+    <remap from="initialpose" to="in_pose" />
+
   </node>
 </group>
 </launch>
