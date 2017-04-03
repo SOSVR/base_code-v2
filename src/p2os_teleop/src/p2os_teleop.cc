@@ -65,7 +65,7 @@ class TeleopBase
   int deadman_button, run_button;
   bool deadman_no_publish_;
   bool deadman_;
-	bool running_;
+  bool running_;
 
   ros::Time last_recieved_joy_message_time_;
   ros::Duration joy_msg_timeout_;
@@ -75,7 +75,7 @@ class TeleopBase
   ros::Subscriber joy_sub_;
   ros::Subscriber passthrough_sub_;
 
-  TeleopBase(bool deadman_no_publish = false) : max_vx(0.6), max_vy(0.6), max_vw(0.8), max_vx_run(0.6), max_vy_run(0.6), max_vw_run(0.8), deadman_no_publish_(deadman_no_publish), running_(false)
+  TeleopBase(bool deadman_no_publish = false) : max_vx(0.5), max_vy(0.5), max_vw(1.0), max_vx_run(0.8), max_vy_run(0.6), max_vw_run(1.2), deadman_no_publish_(deadman_no_publish), running_(false)
   { }
 
   void init()
@@ -177,10 +177,25 @@ class TeleopBase
   void send_cmd_vel()
   {
     if(deadman_ &&
-		  last_recieved_joy_message_time_ + joy_msg_timeout_ > ros::Time::now() && running_ )
+                  last_recieved_joy_message_time_ + joy_msg_timeout_ > ros::Time::now() )
     {
-    	cmd.linear.x = req_vx;
-      cmd.linear.y = req_vy;
+
+       if(req_vx-cmd.linear.x>0.3){
+         cmd.linear.x +=0.1;
+       }else if(req_vx-cmd.linear.x<-0.3){
+         cmd.linear.x -=0.1;
+
+       }
+       else{cmd.linear.x = req_vx;}
+
+
+       if(req_vy-cmd.linear.y>0.3){
+         cmd.linear.y +=0.3;
+       }else if(req_vy-cmd.linear.y<-0.3){
+         cmd.linear.y -=0.3;
+       }
+       else{cmd.linear.y = req_vy;}
+
       cmd.angular.z = req_vw;
       vel_pub_.publish(cmd);
          
@@ -189,7 +204,27 @@ class TeleopBase
     else
     {
       //cmd.linear.x = cmd.linear.y = cmd.angular.z = 0;
-      cmd = passthrough_cmd;
+
+      if(cmd.linear.x>0.3){
+        cmd.linear.x -=0.1;
+      }else if(cmd.linear.x<-0.3){
+        cmd.linear.x +=0.1;
+
+      }
+      else{cmd.linear.x = 0;}
+
+      if(cmd.linear.y>0.3){
+        cmd.linear.y -=0.3;
+      }else if(cmd.linear.y<-0.3){
+        cmd.linear.y +=0.3;
+
+      }
+      else{cmd.linear.y = 0;}
+
+
+
+      cmd.angular.z = 0;
+
       //if (!deadman_no_publish_)
       {
         vel_pub_.publish(cmd);//Only publish if deadman_no_publish is enabled
