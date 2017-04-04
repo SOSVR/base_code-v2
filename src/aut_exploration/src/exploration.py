@@ -166,13 +166,7 @@ class Explore_Block(smach.State):
 
 
 
-# define state Explore_Next_corner
-##############################3
-##############################
 
-# define state Chose_different_block
-##############################3
-##############################
 
 
 # define state Conntact_master
@@ -346,5 +340,4 @@ Odom_data=None;
 
 if __name__ == '__main__':
     robotnamespace=rospy.get_param("namespace");
-    print
     main();
