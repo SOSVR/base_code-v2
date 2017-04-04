@@ -5,7 +5,7 @@
 	<param name="axis_vw" type="int" value="0" />
 	<param name="axis_vy" type="int" value="2" />
 	<param name="deadman_button" type="int" value="0" />
-	<param name="run_button" type="int" value="5" />
+	<param name="run_button" type="int" value="7" />
 	<node pkg="p2os_teleop" type="p2os_teleop" name="p2os_teleop" output="screen" >
 		<remap from="/des_vel" to="/base_controller/command" />
 	</node>

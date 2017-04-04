@@ -135,8 +135,6 @@ include_directories(
 ## Declare a C++ executable
 # add_executable(aut_exploration_node src/aut_exploration_node.cpp)
 
-add_executable(px_cal src/PxCalculator.cpp)
-target_link_libraries(px_cal ${catkin_LIBRARIES})
 
 
 ## Add cmake target dependencies of the executable

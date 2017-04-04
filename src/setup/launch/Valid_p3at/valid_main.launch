@@ -14,15 +14,25 @@
   </include>
 
 
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos1"/>
+  </include>
+
 
   <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
     <arg name="robotname" value="sos2"/>
-    <arg name="initialx" value="-18"/>
-    <arg name="initialy" value="18"/>
+    <arg name="initialx" value="-10"/>
+    <arg name="initialy" value="-10"/>
   </include>
   <include file="$(find setup)/launch/Valid_p3at/valid_gmapping.launch">
     <arg name="robotname" value="sos2"/>
   </include>
+
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos2"/>
+  </include>
+
   <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
     <arg name="robotname" value="sos3"/>
     <arg name="initialx" value="0"/>
@@ -31,14 +41,26 @@
   <include file="$(find setup)/launch/Valid_p3at/valid_gmapping.launch">
     <arg name="robotname" value="sos3"/>
   </include>
+
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos3"/>
+  </include>
+
   <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
     <arg name="robotname" value="sos4"/>
-    <arg name="initialx" value="-10"/>
-    <arg name="initialy" value="-10"/>
+    <arg name="initialx" value="-5"/>
+    <arg name="initialy" value="5"/>
   </include>
   <include file="$(find setup)/launch/Valid_p3at/valid_gmapping.launch">
     <arg name="robotname" value="sos4"/>
   </include>
+
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos4"/>
+  </include>
+
 
 
 
@@ -65,15 +87,15 @@
 
 
 
-  <include file="$(find setup)/launch/Valid_p3at/valid_map_merger.launch">
-  </include-->
+  <include file="$(find setup)/launch/map_merger.launch">
+  </include>
 
 
-  <include file="$(find setup)/launch/telop_joy.launch" />
+  <include file="$(find setup)/launch/telop_joy.launch" /-->
 
 
     <node pkg="rqt_gui"  type="rqt_gui"    name="rqt_gui"  args="--perspective-file $(find setup)/rviz/myfinal.perspective" />
-   <!--node pkg="rviz" type="rviz" name="rviz" args="-d $(find setup)/rviz/validconfig.rviz" /-->
+   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find setup)/rviz/validconfig.rviz" />
 
 
 

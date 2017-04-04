@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="robotname" default="sos1"/>
+
+  <group ns="$(arg robotname)">
+      <param name="namespace" value="$(arg robotname)" />
+    <node pkg="aut_exploration" type="exploration.py" name="explore_client" output="screen">
+    </node>
+
+
+
+  </group>
+</launch>
