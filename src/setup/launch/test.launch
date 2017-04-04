@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find setup)/launch/hmapping.launch">
+    <arg name="robotname" value="sos1"/>
+  </include>
+
+  <include file="$(find setup)/launch/move_base.launch">
+    <arg name="robotname" value="sos1"/>
+  </include>
+
+  
+  <include file="$(find setup)/launch/map_merger.launch">
+  </include>
+
+
+
+
+
+<node pkg="rviz" type="rviz" name="rviz" args="-d $(find setup)/rviz/myconfig.rviz" />
+
+
+
+
+</launch>
