@@ -99,7 +99,7 @@
     ros::Subscriber robotPoseSub;
     scanSub=nh.subscribe<sensor_msgs::LaserScan>("/base_scan",10,processLaserScan);
     victSub=scanSub=nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,processDetections);
-    robotPoseSub=nh.subscribe<nav_msgs::Odometry>("/odom",10,robotPoseInitial);
+    robotPoseSub=nh.subscribe<nav_msgs::Odometry>("/sos1/odom",10,robotPoseInitial);
     victPub = nh.advertise<std_msgs::String>("/victim_detected", 10);
     ROS_INFO("firstInit done! \n");
   }
