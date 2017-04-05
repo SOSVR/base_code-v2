@@ -12,6 +12,8 @@ from python_qt_binding.QtGui import QWidget
 from python_qt_binding.QtGui import QIcon
 from threading import Thread
 from time import sleep
+from actionlib_msgs.msg import *;
+
 
 class MyPlugin(Plugin):
 
@@ -77,12 +79,17 @@ class MyPlugin(Plugin):
 
 		self._widget.buttonOn.clicked.connect(self.turnRobotOn)
 		self._widget.buttonOff.clicked.connect(self.turnRobotOff)
+		a1 = rospy.Publisher("/sos1/move_base/cancel", GoalID, queue_size=10)
+		a2 = rospy.Publisher("/sos2/move_base/cancel", GoalID, queue_size=10)
+		a3 = rospy.Publisher("/sos3/move_base/cancel", GoalID, queue_size=10)
+		a4 = rospy.Publisher("/sos4/move_base/cancel", GoalID, queue_size=10)
 
 		ss_pub1 = rospy.Publisher('sos1/cmd_vel', Twist, queue_size=10)
 		ss_pub2 = rospy.Publisher('sos2/cmd_vel', Twist, queue_size=10)
 		ss_pub3 = rospy.Publisher('sos3/cmd_vel', Twist, queue_size=10)
 		ss_pub4 = rospy.Publisher('sos4/cmd_vel', Twist, queue_size=10)
 		self._pubs = [ss_pub1, ss_pub2, ss_pub3, ss_pub4]
+		self._holds= [a1, a2, a3, a4]
 
 		context.add_widget(self._widget)
 		self.subscribeToJoy()
@@ -106,6 +113,20 @@ class MyPlugin(Plugin):
             if (data.buttons[4] == 1 ):
                         nextIndex = self.getBackIndex()
                         self._widget.robot_box.setCurrentIndex(nextIndex)
+
+            if(data.buttons[15]==1):
+                   self._holds[0].publish(GoalID())
+                   return;
+            if(data.buttons[14]==1):
+                   self._holds[1].publish(GoalID())
+                   return;
+            if(data.buttons[16]==1):
+                   self._holds[2].publish(GoalID())
+                   return;
+            if(data.buttons[13]==1):
+                   self._holds[3].publish(GoalID())
+                   return;
+
 
 	def publishCmdVel(self, data):
 		self._pubs[int(str(self._widget.robot_box.currentText())[3:])-1].publish(data)
