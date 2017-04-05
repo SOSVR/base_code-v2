@@ -13,7 +13,7 @@
     <param name="iterations" value="1" />
     <param name="maxUrange" value="29" />
     <param name="maxRange" value="30.4" />
-
+    <param name="linearUpdate" value="0.5" />
     <param name="xmin" value="-20" />
     <param name="xmax" value="20" />
     <param name="ymax" value="20" />

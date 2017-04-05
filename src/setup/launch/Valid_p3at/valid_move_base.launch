@@ -34,7 +34,7 @@
             angular_sim_granularity: 0.015
 
             acc_lim_theta: 1.6
-            acc_lim_x: 0.8
+            acc_lim_x: 0.6
             acc_lim_y: 0.0
 
             holonomic_robot: false
@@ -45,7 +45,7 @@
           #Trajectory Scoring Parameters
             pdist_scale:  3.0
             gdist_scale:  0.6
-            occdist_scal: 0.06 #default 0.01
+            occdist_scal: 0.075 #default 0.01
 
         NavfnROS:
           allow_unknown: true
