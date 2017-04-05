@@ -16,9 +16,12 @@ from smach_ros import ServiceState;
 from std_msgs.msg import Header;
 from tf import TransformListener;
 
+
+move_base_cancel=None;
 GCostmap_data = None;
 robotnamespace = None;
 Odom_data = None;
+current_victim_status=None;
 current_goal_status = 0 ; # goal status
 # PENDING=0
 # ACTIVE=1
@@ -30,6 +33,12 @@ current_goal_status = 0 ; # goal status
 # RECALLING=7
 # RECALLED=8
 # LOST=9
+
+def cancel_publisher():
+    global move_base_cancel;
+    move_base_cancel=rospy.Publisher(robotnamespace+"/move_base/cancel",GoalID,10);
+
+
 def in_range(x, y, w, z):
     return math.sqrt((x - w) ** 2 + (y - z) ** 2);
 
@@ -42,6 +51,17 @@ def setMap(costmap_data):
     GCostmap_data = costmap_data;
 
 
+def PxCalculator(mapdata):
+    sum = 0;
+    for i in range(0, len(mapdata)):
+        if mapdata[i] >= 0:
+            sum += 1;
+        else:
+            sum -= 1;
+    final_sum = (sum + len(mapdata)) / (2 * len(mapdata)) * 100;
+    return final_sum;
+
+
 
 # subscriber method callback from /move_base/status
 def callback_goal_status(data):
@@ -51,9 +71,34 @@ def callback_goal_status(data):
 
 # subscriber method from /move_base/status
 def listener_goal_status():
-    rospy.Subscriber((robot_namespace + "/move_base/status"), GoalStatusArray, callback_goal_status)
+    rospy.Subscriber((robotnamespace + "/move_base/status"), GoalStatusArray, callback_goal_status)
 
 
+def Block_chosser(mapdata):
+    # global current_goal_status
+    # listener_goal_status()
+
+    length = int(math.sqrt(len(mapdata)));
+    dividor3 = int(length / 3);
+    blocks = [];
+    a = 0;
+    for i in range(0, length, dividor3):
+        for k in range(0, length, dividor3):
+            blocks[a] = [];
+            for j in range(0, dividor3):
+                blocks[a].extend(mapdata[i * length + j * length + k:i * length + j * length + k + dividor3 - 1]);
+    a += 1;
+    minPX = PxCalculator(blocks[0]);
+    minIndex = 0;
+    for w in range(1, 9):
+        if PxCalculator(blocks[w]) < minPX:
+            minPX = PxCalculator(blocks[w]);
+            minIndex = w;
+
+    if minPX > 75:
+        return -1;
+    else:
+        return minIndex;
 
 
 
@@ -65,11 +110,10 @@ class Point():
         self.x = xVector;
         self.y = yVector;
 
-    def get_Type(self):
-        return self.type;
 
 
 class Block():
+
     def __init__(self, center, tl, tr, br, bl, matrix):
         self.type = "Block";
         self.center = center;
@@ -79,23 +123,6 @@ class Block():
         self.bottomLeft = bl;
         self.matrix = matrix;
 
-    def get_Center(self):
-        return self.center;
-
-    def get_TL(self):
-        return self.topLeft;
-
-    def get_TR(self):
-        return self.topRight;
-
-    def get_BR(self):
-        return self.bottomRight;
-
-    def get_BL(self):
-        return self.bottomLeft;
-
-    def get_Type(self):
-        return self.type;
 
 
 # define state Chose_block
@@ -179,7 +206,7 @@ class Explore_Block(smach.State):
     def odomCallback(data):
         pass;
 
-    def move_to_goal(self, pos_x, pos_y, pos_z, ornt_w=1, ornt_x=0, ornt_y=0, ornt_z=1):
+    def move_to_goal(self, pos_x, pos_y, pos_z=0, ornt_w=1, ornt_x=0, ornt_y=0, ornt_z=1):
         # Simple Action Client
         sac = actionlib.SimpleActionClient(robotnamespace + "/move_base", MoveBaseAction);
 
@@ -200,13 +227,35 @@ class Explore_Block(smach.State):
         # send goal
         sac.send_goal(goal);
         odom_temp = Odom_data;
-        rate = rospy.Rate(1);  # 10hz
+        rate = rospy.Rate(3);  # 10hz
         i = 0;
         while not rospy.is_shutdown():
             if odom_temp.pose.pose.position.x == Odom_data.pose.pose.position.x and odom_temp.pose.pose.position.y == Odom_data.pose.pose.position.y:
                 i += 1;
             else:
                 odom_temp = Odom_data;
+            if current_victim_status=="victim detected" :
+                a = rospy.Publisher("move_base/cancel", GoalID, queue_size=10);
+                a.publish(GoalID());
+                rospy.sleep(30.0);
+                goal.target_pose.header.stamp = rospy.Time.now();
+                sac.send_goal(goal);
+            elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
+                px=PxCalculator(self.matrix);
+                if px >75 :
+                    self.status="fully explored";
+                    return;
+                else:
+                    self.status="not explored yet";
+                    return ;
+            elif i==36 :
+                px = PxCalculator(self.matrix);
+                if px > 75:
+                    self.status = "fully explored";
+                    return;
+                else:
+                    self.status = "not explored yet";
+                    return;
 
             rate.sleep();
 
@@ -219,22 +268,19 @@ class Explore_Block(smach.State):
     def execute(self, userdata):
         rospy.loginfo("Executing state Explore_Center");
         a = userdata.EB_input;
-        if a.get_Type() == "Block" and self.count == 0:
+        userdata.EB_output=a;
+        if a.type == "Block" and self.count == 0:
             self.block = a;
-            self.points = [];
-            self.points[0] = a.get_Center();
-            self.points[1] = a.get_TL();
-            self.points[2] = a.get_TR();
-            self.points[3] = a.get_BR();
-            self.points[4] = a.get_BL();
-            self.move_to_goal(self.points[0]);
-        elif a.get_Type() == "Block" and self.count > 0:
-            self.move_to_goal(self.points[self.count]);
+            self.points = [ (a.center),(a.topLeft),(a.topRight),(a.bottomRight),(a.bottomLeft)];
+            self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
+        elif a.type == "Block" and self.count > 0:
+            self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
             self.count += 1;
             if self.count > 4:
                 if self.status == "not explored yet":
                     self.status = "exploration failed";
                 self.count = 0;
+
 
         if self.status == "fully explored":
             return "exploration_completed";
@@ -256,16 +302,47 @@ class Conntact_master(smach.State):
         smach.State.__init__(self, outcomes=["goal_received", "NOT_received", "map_fully_explored"],
                              input_keys=["CM_input"], output_keys=["CM_output"]);
         self.goal = None;
+        self.pub=rospy.Publisher("requet_of_goal",Odometry,10);
+        self.sub=rospy.Subscriber("respans_from_master",Odometry,self.sub_callBack);
+        self.goal=None;
 
-    def Calculations(self):
-        rospy.loginfo("calculationg");
+    def sub_callBack(self,data):
+        rospy.loginfo("sub_callBack");
+        self.goal=Point(data.pose.pose.position.x,data.pose.pose.position.y);
+        if data.pose.pose.position.z==10 :
+            self.goal.resault="found";
+
+
+
 
     def execute(self, userdata):
         rospy.loginfo("Executing state Conntact_master");
+        r=rospy.Rate(1);
+        i=0;
         a = "taher";
-        if a == "javadi":
+        while not rospy.is_shutdown() :
+
+            if i>20 :
+                userdata.CM_output=userdata.CM_output;
+                a=None;
+                self.goal=None;
+                break;
+            elif self.goal==None :
+                i+=;
+            else:
+                userdata.CM_output=self.goal;
+                if self.goal.resault=="found":
+                     a="goal received"
+                else:
+                    a="map explored";
+                self.goal=None;
+                break;
+            r.sleep();
+
+
+        if a == "goal received":
             return "goal_received";
-        elif a == "azami":
+        elif a == "map explored":
             return "map_fully_explored";
         else:
             return "NOT_received";
@@ -287,6 +364,7 @@ class GOTO_Goal(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo("Executing state GOTO_Goal");
+
         a = "taher";
         if a == "javadi":
             return "goal_reached";
@@ -321,42 +399,9 @@ class a_simple_state(smach.State):
 # our main function
 ##############################3
 ##############################
-def Block_chosser(mapdata):
-    # global current_goal_status
-    # listener_goal_status()
-
-    length = int(math.sqrt(len(mapdata)));
-    dividor3 = int(length / 3);
-    blocks = [];
-    a = 0;
-    for i in range(0, length, dividor3):
-        for k in range(0, length, dividor3):
-            blocks[a] = [];
-            for j in range(0, dividor3):
-                blocks[a].extend(mapdata[i * length + j * length + k:i * length + j * length + k + dividor3 - 1]);
-    a += 1;
-    minPX = PxCalculator(blocks[0]);
-    minIndex = 0;
-    for w in range(1, 9):
-        if PxCalculator(blocks[w]) < minPX:
-            minPX = PxCalculator(blocks[w]);
-            minIndex = w;
-
-    if minPX > 75:
-        return -1;
-    else:
-        return minIndex;
 
 
-def PxCalculator(mapdata):
-    sum = 0;
-    for i in range(0, len(mapdata)):
-        if mapdata[i] >= 0:
-            sum += 1;
-        else:
-            sum -= 1;
-    final_sum = (sum + len(mapdata)) / (2 * len(mapdata)) * 100;
-    return final_sum;
+
 
 
 def main():
