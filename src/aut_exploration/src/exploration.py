@@ -36,7 +36,7 @@ current_goal_status = 0 ; # goal status
 
 def cancel_publisher():
     global move_base_cancel;
-    move_base_cancel=rospy.Publisher(robotnamespace+"/move_base/cancel",GoalID,10);
+    move_base_cancel=rospy.Publisher("move_base/cancel",GoalID,10);
 
 
 def in_range(x, y, w, z):
@@ -44,11 +44,14 @@ def in_range(x, y, w, z):
 
 
 def setOdom(rawodomdata):
+    global Odom_data;
     Odom_data = rawodomdata;
 
 
 def setMap(costmap_data):
+    global GCostmap_data;
     GCostmap_data = costmap_data;
+    print "asdkfjklsdfjklsdfjsd";
 
 
 def PxCalculator(mapdata):
@@ -71,7 +74,7 @@ def callback_goal_status(data):
 
 # subscriber method from /move_base/status
 def listener_goal_status():
-    rospy.Subscriber((robotnamespace + "/move_base/status"), GoalStatusArray, callback_goal_status)
+    rospy.Subscriber("move_base/status", GoalStatusArray, callback_goal_status);
 
 
 def Block_chosser(mapdata):
@@ -84,7 +87,7 @@ def Block_chosser(mapdata):
     a = 0;
     for i in range(0, length, dividor3):
         for k in range(0, length, dividor3):
-            blocks[a] = [];
+            blocks.insert(a,[]) ;
             for j in range(0, dividor3):
                 blocks[a].extend(mapdata[i * length + j * length + k:i * length + j * length + k + dividor3 - 1]);
     a += 1;
@@ -142,6 +145,7 @@ class Chose_block(smach.State):
         self.bottomLeft = None;
 
     def Calculations(self):
+        global GCostmap_data;
         rospy.loginfo("calculationg");
         # our code
         # goes in this
@@ -166,7 +170,9 @@ class Chose_block(smach.State):
 
         Cell = [];
         for i in range(0, 180):
+            print GCostmap_data.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght];
             Cell.extend(GCostmap_data.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght]);
+        print len(Cell);
         block_index = Block_chosser(Cell);
         if block_index == -1:
             return "conntact the master";
@@ -210,8 +216,10 @@ class Explore_Block(smach.State):
 
     def move_to_goal(self, pos_x, pos_y, pos_z=0, ornt_w=1, ornt_x=0, ornt_y=0, ornt_z=1):
         # Simple Action Client
-        sac = actionlib.SimpleActionClient(robotnamespace + "/move_base", MoveBaseAction);
-
+        global current_goal_status;
+        global current_victim_status;
+        sac = actionlib.SimpleActionClient("move_base", MoveBaseAction);
+        print "aklsaklsdfjklsdjf3333333333333";
         # create goal
         goal = MoveBaseGoal();
 
@@ -220,7 +228,7 @@ class Explore_Block(smach.State):
         goal.target_pose.pose.position.y = pos_y;
         goal.target_pose.pose.orientation.w = ornt_w;
         goal.target_pose.pose.orientation.z = ornt_z;
-        goal.target_pose.header.frame_id = (robotnamespace + "/odom");
+        goal.target_pose.header.frame_id = robotnamespace + "/odom";
         goal.target_pose.header.stamp = rospy.Time.now();
 
         # start listener
@@ -232,6 +240,7 @@ class Explore_Block(smach.State):
         rate = rospy.Rate(3);  # 10hz
         i = 0;
         while not rospy.is_shutdown():
+            i+=1;
             if odom_temp.pose.pose.position.x == Odom_data.pose.pose.position.x and odom_temp.pose.pose.position.y == Odom_data.pose.pose.position.y:
                 i += 1;
             else:
@@ -256,18 +265,24 @@ class Explore_Block(smach.State):
                 px=PxCalculator(self.matrix);
                 if px >75 :
                     self.status="fully explored";
+                    print "fully explored";
                     return;
                 else:
                     self.status="not explored yet";
+                    print "not explored yet";
                     return ;
-            elif i==36 :
-                px = PxCalculator(self.matrix);
+            elif i==90 :
+                px = PxCalculator(self.block.matrix);
                 if px > 75:
                     self.status = "fully explored";
+                    print "fully explored";
                     return;
                 else:
                     self.status = "not explored yet";
+                    print "not explored yet";
                     return;
+            else:
+                print "shdfsdfsfjsdfsl"
 
             rate.sleep();
 
@@ -282,10 +297,13 @@ class Explore_Block(smach.State):
         a = userdata.EB_input;
         userdata.EB_output=a;
         if a.type == "Block" and self.count == 0:
+            print "aklsaklsdfjklsdjf111111111111111";
             self.block = a;
             self.points = [ (a.center),(a.topLeft),(a.topRight),(a.bottomRight),(a.bottomLeft)];
             self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
+            print self.status;
         elif a.type == "Block" and self.count > 0:
+            print "aklsaklsdfjklsdjf2222222222";
             self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
             self.count += 1;
             if self.count > 4:
@@ -340,7 +358,7 @@ class Conntact_master(smach.State):
                 self.goal=None;
                 break;
             elif self.goal==None :
-                i+=;
+                i+=1;
             else:
                 userdata.CM_output=self.goal;
                 if self.goal.resault=="found":
@@ -419,11 +437,11 @@ class a_simple_state(smach.State):
 def main():
     rospy.init_node('smach_example_state_machine');
 
-    Odom_topic = "/%s/odom" % (robotnamespace);
+    Odom_topic = "odom";
     rospy.Subscriber(Odom_topic, Odometry, setOdom);
-    global_costmap_topic = "/%s/move_base/global_costmap/costmap" % (robotnamespace);
+    global_costmap_topic = "move_base/global_costmap/costmap";
     rospy.Subscriber(global_costmap_topic, OccupancyGrid, setMap);
-
+    rospy.sleep(1);
     # Create the top level SMACH state machine
     sm_exploration = smach.StateMachine(outcomes=["hold", "shut_down"]);
 

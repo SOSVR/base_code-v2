@@ -18,10 +18,6 @@
     <arg name="robotname" value="sos1"/>
   </include>
 
-  <include file="$(find setup)/launch/Valid_p3at/Valid_fexploration.launch">
-    <arg name="robotname" value="sos1"/>
-  </include>
-
 
 
 
