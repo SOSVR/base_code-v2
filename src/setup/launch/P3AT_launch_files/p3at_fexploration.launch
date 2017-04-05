@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="robotname" default="sos1"/>
+
+  <group ns="$(arg robotname)">
+
+    <node pkg="frontier_exploration" type="explore_client" name="explore_client" output="screen">
+      <remap from="/clicked_point" to="clicked_point"/>
+    </node>
+    <node pkg="frontier_exploration" type="explore_server" name="explore_server" output="screen">
+
+      <param name="frequency" value="2.0"/>
+
+      <param name="goal_aliasing" value="20.0"/>
+
+      <rosparam file="$(find setup)/config/P3AT_config/costmap_exploration_params.yaml" command="load" ns="explore_costmap" />
+
+    </node>
+
+  </group>
+</launch>

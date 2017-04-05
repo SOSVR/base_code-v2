@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <arg name="robotname" default="sos1"/>
+
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_gmapping.launch">
+    <arg name="robotname" value="$(arg robotname)"/>
+  </include>
+
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="$(arg robotname)"/>
+  </include>
+
+
+</launch>

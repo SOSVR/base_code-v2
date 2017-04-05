@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
+    <arg name="robotname" value="sos1"/>
+    <arg name="initialx" value="-10"/>
+    <arg name="initialy" value="-10"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
+    <arg name="robotname" value="sos2"/>
+    <arg name="initialx" value="10"/>
+    <arg name="initialy" value="-10"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
+    <arg name="robotname" value="sos3"/>
+    <arg name="initialx" value="-10"/>
+    <arg name="initialy" value="10"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_spawn.launch">
+    <arg name="robotname" value="sos4"/>
+    <arg name="initialx" value="10"/>
+    <arg name="initialy" value="10"/>
+  </include>
+
+
+
+
+</launch>

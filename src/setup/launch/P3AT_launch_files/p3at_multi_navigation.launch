@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
+    <arg name="robotname" value="sos1"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos1"/>
+  </include>
+
+
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
+    <arg name="robotname" value="sos2"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos2"/>
+  </include>
+
+
+
+
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
+    <arg name="robotname" value="sos3"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos3"/>
+  </include>
+
+
+
+
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
+    <arg name="robotname" value="sos4"/>
+  </include>
+
+  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+    <arg name="robotname" value="sos4"/>
+  </include>
+
+
+
+
+
+
+</launch>

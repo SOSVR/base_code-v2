@@ -51,7 +51,6 @@ def setOdom(rawodomdata):
 def setMap(costmap_data):
     global GCostmap_data;
     GCostmap_data = costmap_data;
-    print "asdkfjklsdfjklsdfjsd";
 
 
 def PxCalculator(mapdata):
@@ -64,13 +63,13 @@ def PxCalculator(mapdata):
     final_sum = (sum + len(mapdata)) / (2 * len(mapdata)) * 100;
     return final_sum;
 
-
-
 # subscriber method callback from /move_base/status
 def callback_goal_status(data):
-    global current_goal_status
-    current_goal_status = data.status_list[len(data.status_list) - 1].status
-
+    global current_goal_status;
+    if len(data.status_list)==0 :
+        return;
+    print data.status_list[len(data.status_list) - 2].status;
+    current_goal_status = data.status_list[len(data.status_list) - 2].status;
 
 # subscriber method from /move_base/status
 def listener_goal_status():
@@ -78,7 +77,7 @@ def listener_goal_status():
 
 
 def Block_chosser(mapdata):
-    # global current_goal_status
+    global current_goal_status;
     # listener_goal_status()
 
     length = int(math.sqrt(len(mapdata)));
@@ -99,9 +98,9 @@ def Block_chosser(mapdata):
             minIndex = w;
 
     if minPX > 75:
-        return -1;
+        return [-1, blocks[minIndex]];
     else:
-        return minIndex;
+        return [minIndex, blocks[minIndex]];
 
 
 
@@ -170,10 +169,9 @@ class Chose_block(smach.State):
 
         Cell = [];
         for i in range(0, 180):
-            print GCostmap_data.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght];
             Cell.extend(GCostmap_data.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght]);
-        print len(Cell);
-        block_index = Block_chosser(Cell);
+        resaultList = Block_chosser(Cell);
+        block_index=resaultList[0];
         if block_index == -1:
             return "conntact the master";
         else:
@@ -185,7 +183,7 @@ class Chose_block(smach.State):
             self.bottomRight = myPoint(cx + 7, cy - 7);
             self.bottomLeft = myPoint(cx - 7, cy - 7);
             self.block = Block(self.center, self.topLeft, self.topRight, self.bottomRight, self.bottomLeft,
-                               Cell[block_index]);
+                               resaultList[1]);
 
     def execute(self, userdata):
         rospy.loginfo("Executing state Chose_block");
@@ -265,24 +263,25 @@ class Explore_Block(smach.State):
                 px=PxCalculator(self.matrix);
                 if px >75 :
                     self.status="fully explored";
-                    print "fully explored";
+                    print "fully explored move base finished";
                     return;
                 else:
                     self.status="not explored yet";
-                    print "not explored yet";
+                    print "not explored yet move base finished";
                     return ;
-            elif i==90 :
+            elif i==230 :
+                i=0;
                 px = PxCalculator(self.block.matrix);
                 if px > 75:
                     self.status = "fully explored";
-                    print "fully explored";
+                    print "fully explored timed out";
                     return;
                 else:
                     self.status = "not explored yet";
-                    print "not explored yet";
+                    print "not explored yet timed out";
                     return;
             else:
-                print "shdfsdfsfjsdfsl"
+                print i;
 
             rate.sleep();
 
@@ -441,6 +440,8 @@ def main():
     rospy.Subscriber(Odom_topic, Odometry, setOdom);
     global_costmap_topic = "move_base/global_costmap/costmap";
     rospy.Subscriber(global_costmap_topic, OccupancyGrid, setMap);
+    rospy.Subscriber("move_base/status", GoalStatusArray, callback_goal_status);
+
     rospy.sleep(1);
     # Create the top level SMACH state machine
     sm_exploration = smach.StateMachine(outcomes=["hold", "shut_down"]);
