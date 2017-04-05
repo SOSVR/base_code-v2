@@ -37,7 +37,7 @@
     <param name="base_frame" value="$(arg robotname)/base_link"/>
     <param name="odom_frame" value="$(arg robotname)/odom" />
     <remap from="scan" to="/$(arg robotname)/hokuyo" />
-    <remap from="initialpose" to="in_pose" />
+    <remap from="initialpose" to="/$(arg robotname)/initialpose" />
 
   </node>
 </group>

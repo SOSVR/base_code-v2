@@ -5,6 +5,9 @@
   <group ns="$(arg robotname)">
       <param name="namespace" value="$(arg robotname)" />
     <node pkg="aut_exploration" type="exploration.py" name="explore_client" output="screen">
+      <param name="xofgoal"   value="-1" />
+      <param name="yofgoal"    value="-1" />
+
     </node>
 
 

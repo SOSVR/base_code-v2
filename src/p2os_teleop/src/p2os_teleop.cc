@@ -180,19 +180,19 @@ class TeleopBase
                   last_recieved_joy_message_time_ + joy_msg_timeout_ > ros::Time::now() )
     {
 
-       if(req_vx-cmd.linear.x>0.3){
-         cmd.linear.x +=0.3;
-       }else if(req_vx-cmd.linear.x<-0.3){
-         cmd.linear.x -=0.3;
+       if(req_vx-cmd.linear.x>0.2){
+         cmd.linear.x +=0.2;
+       }else if(req_vx-cmd.linear.x<-0.2){
+         cmd.linear.x -=0.2;
 
        }
        else{cmd.linear.x = req_vx;}
 
 
-       if(req_vy-cmd.linear.y>0.3){
-         cmd.linear.y +=0.3;
-       }else if(req_vy-cmd.linear.y<-0.3){
-         cmd.linear.y -=0.3;
+       if(req_vy-cmd.linear.y>0.2){
+         cmd.linear.y +=0.2;
+       }else if(req_vy-cmd.linear.y<-0.2){
+         cmd.linear.y -=0.2;
        }
        else{cmd.linear.y = req_vy;}
 
@@ -205,18 +205,18 @@ class TeleopBase
     {
       //cmd.linear.x = cmd.linear.y = cmd.angular.z = 0;
 
-      if(cmd.linear.x>0.3){
-        cmd.linear.x -=0.3;
-      }else if(cmd.linear.x<-0.3){
-        cmd.linear.x +=0.3;
+      if(cmd.linear.x>0.2){
+        cmd.linear.x -=0.2;
+      }else if(cmd.linear.x<-0.2){
+        cmd.linear.x +=0.2;
 
       }
       else{cmd.linear.x = 0;}
 
-      if(cmd.linear.y>0.3){
-        cmd.linear.y -=0.3;
-      }else if(cmd.linear.y<-0.3){
-        cmd.linear.y +=0.3;
+      if(cmd.linear.y>0.2){
+        cmd.linear.y -=0.2;
+      }else if(cmd.linear.y<-0.2){
+        cmd.linear.y +=0.2;
 
       }
       else{cmd.linear.y = 0;}

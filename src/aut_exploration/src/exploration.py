@@ -50,6 +50,7 @@ def setOdom(rawodomdata):
 
 def setMap(costmap_data):
     global GCostmap_data;
+    print "ajsdfkljsdkasdjflkasdjfklasdjfsjfklsdj"
     GCostmap_data = costmap_data;
 
 
@@ -260,7 +261,7 @@ class Explore_Block(smach.State):
                 goal.target_pose.header.stamp = rospy.Time.now();
                 sac.send_goal(goal);
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
-                px=PxCalculator(self.matrix);
+                px=PxCalculator(self.block.matrix);
                 if px >75 :
                     self.status="fully explored";
                     print "fully explored move base finished";
@@ -269,7 +270,7 @@ class Explore_Block(smach.State):
                     self.status="not explored yet";
                     print "not explored yet move base finished";
                     return ;
-            elif i==230 :
+            elif i==900 :
                 i=0;
                 px = PxCalculator(self.block.matrix);
                 if px > 75:
@@ -280,8 +281,6 @@ class Explore_Block(smach.State):
                     self.status = "not explored yet";
                     print "not explored yet timed out";
                     return;
-            else:
-                print i;
 
             rate.sleep();
 
@@ -293,6 +292,8 @@ class Explore_Block(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo("Executing state Explore_Center");
+        print self.count
+        print "this was the number that you expected"
         a = userdata.EB_input;
         userdata.EB_output=a;
         if a.type == "Block" and self.count == 0:
@@ -300,11 +301,13 @@ class Explore_Block(smach.State):
             self.block = a;
             self.points = [ (a.center),(a.topLeft),(a.topRight),(a.bottomRight),(a.bottomLeft)];
             self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
-            print self.status;
+            if self.status=="not explored yet" :
+                self.count+=1;
         elif a.type == "Block" and self.count > 0:
             print "aklsaklsdfjklsdjf2222222222";
             self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
-            self.count += 1;
+            if self.status=="not explored yet" :
+                self.count+=1;
             if self.count > 4:
                 if self.status == "not explored yet":
                     self.status = "exploration failed";
@@ -434,15 +437,7 @@ class a_simple_state(smach.State):
 
 
 def main():
-    rospy.init_node('smach_example_state_machine');
-
-    Odom_topic = "odom";
-    rospy.Subscriber(Odom_topic, Odometry, setOdom);
-    global_costmap_topic = "move_base/global_costmap/costmap";
-    rospy.Subscriber(global_costmap_topic, OccupancyGrid, setMap);
-    rospy.Subscriber("move_base/status", GoalStatusArray, callback_goal_status);
-
-    rospy.sleep(1);
+    rospy.sleep(5);
     # Create the top level SMACH state machine
     sm_exploration = smach.StateMachine(outcomes=["hold", "shut_down"]);
 
@@ -480,9 +475,22 @@ def main():
         # Execute SMACH plan
     aut_explore = sm_exploration.execute();
 
+def elemntryMove(x,y):
+        sac = actionlib.SimpleActionClient("move_base", MoveBaseAction);
+        goal = MoveBaseGoal();
+        goal.target_pose.pose.position.x = float(x);
+        goal.target_pose.pose.position.y = float(y);
+        goal.target_pose.pose.orientation.w = 1.0;
+        goal.target_pose.header.frame_id = robotnamespace + "/odom";
+        goal.target_pose.header.stamp = rospy.Time.now();
+        sac.wait_for_server();
+        sac.send_goal(goal);
+        sac.wait_for_result();
 
 
 
 if __name__ == '__main__':
+    rospy.init_node('smach_example_state_machine');
     robotnamespace = rospy.get_param("namespace");
+    elemntryMove(rospy.get_param("explore_client/xofgoal"),rospy.get_param("explore_client/yofgoal"));
     main();
