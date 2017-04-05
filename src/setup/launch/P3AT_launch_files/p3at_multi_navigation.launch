@@ -5,7 +5,7 @@
     <arg name="robotname" value="sos1"/>
   </include>
 
-  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
     <arg name="robotname" value="sos1"/>
   </include>
 
@@ -14,7 +14,7 @@
     <arg name="robotname" value="sos2"/>
   </include>
 
-  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
     <arg name="robotname" value="sos2"/>
   </include>
 
@@ -25,7 +25,7 @@
     <arg name="robotname" value="sos3"/>
   </include>
 
-  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
     <arg name="robotname" value="sos3"/>
   </include>
 
@@ -36,7 +36,7 @@
     <arg name="robotname" value="sos4"/>
   </include>
 
-  <include file="$(find setup)/launch/Valid_p3at/valid_move_base.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
     <arg name="robotname" value="sos4"/>
   </include>
 
