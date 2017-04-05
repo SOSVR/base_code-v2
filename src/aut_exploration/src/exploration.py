@@ -7,6 +7,8 @@ import smach_ros;
 import actionlib;
 import tf;
 import math
+from visualization_msgs.msg import Marker;
+from visualization_msgs.msg import MarkerArray;
 from aut_exploration.msg import *;
 from geometry_msgs.msg import *;
 from nav_msgs.msg import *;
@@ -16,7 +18,8 @@ from smach_ros import ServiceState;
 from std_msgs.msg import Header;
 from tf import TransformListener;
 
-
+victims=[];
+markcounter=0;
 move_base_cancel=None;
 GCostmap_data = None;
 robotnamespace = None;
@@ -33,6 +36,75 @@ current_goal_status = 0 ; # goal status
 # RECALLING=7
 # RECALLED=8
 # LOST=9
+def elemntryMove(x,y):
+        sac = actionlib.SimpleActionClient("move_base", MoveBaseAction);
+        goal = MoveBaseGoal();
+        goal.target_pose.pose.position.x = float(x);
+        goal.target_pose.pose.position.y = float(y);
+        goal.target_pose.pose.orientation.w = 1.0;
+        goal.target_pose.header.frame_id = robotnamespace + "/odom";
+        goal.target_pose.header.stamp = rospy.Time.now();
+        sac.wait_for_server();
+        sac.send_goal(goal);
+        sac.wait_for_result();
+
+def victim_callback(data):
+    global markcounter;
+    global current_victim_status;
+    global victims;
+    victims.insert(len(victims),Odom_data.pose.pose.position);
+    current_victim_status="victim_detected";
+
+
+
+def mark_location(x, y, mark_id):
+    shape = Marker.CUBE;
+    pub = rospy.Publisher('visualization_marker', Marker, queue_size=100)
+    rate = rospy.Rate(10) # 10hz
+
+    marker = Marker()
+    marker.header.frame_id = "/map"
+    marker.header.stamp = rospy.Time.now()
+
+
+    marker.ns = "basic_shapes"
+    marker.id = mark_id
+
+
+    marker.type = shape
+
+
+    marker.action = Marker.ADD
+
+
+    marker.pose.position.x = x
+    marker.pose.position.y = y
+    marker.pose.position.z = 0
+    marker.pose.orientation.x = 0.0
+    marker.pose.orientation.y = 0.0
+    marker.pose.orientation.z = 0.0
+    marker.pose.orientation.w = 1.0
+
+
+    marker.scale.x = 0.5
+    marker.scale.y = 0.5
+    marker.scale.z = 0.5
+
+
+    marker.color.r = 0.0
+    marker.color.g = 1.0
+    marker.color.b = 0.0
+    marker.color.a = 1.0
+
+    marker.lifetime = rospy.Duration()
+
+
+    rospy.loginfo(marker)
+    rate.sleep()
+    while not rospy.is_shutdown():
+        pub.publish(marker)
+        rate.sleep()
+
 
 def cancel_publisher():
     global move_base_cancel;
@@ -48,9 +120,9 @@ def setOdom(rawodomdata):
     Odom_data = rawodomdata;
 
 
+
 def setMap(costmap_data):
     global GCostmap_data;
-    print "ajsdfkljsdkasdjflkasdjfklasdjfsjfklsdj"
     GCostmap_data = costmap_data;
 
 
@@ -69,12 +141,16 @@ def callback_goal_status(data):
     global current_goal_status;
     if len(data.status_list)==0 :
         return;
-    print data.status_list[len(data.status_list) - 2].status;
     current_goal_status = data.status_list[len(data.status_list) - 2].status;
 
 # subscriber method from /move_base/status
 def listener_goal_status():
+    print "reading data";
     rospy.Subscriber("move_base/status", GoalStatusArray, callback_goal_status);
+    rospy.Subscriber("odom", Odometry, setOdom);
+    rospy.Subscriber("move_base/global_costmap/costmap", OccupancyGrid, setMap);
+    rospy.Subscriber("victim_detected",Point,victim_callback);
+
 
 
 def Block_chosser(mapdata):
@@ -171,6 +247,8 @@ class Chose_block(smach.State):
         Cell = [];
         for i in range(0, 180):
             Cell.extend(GCostmap_data.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght]);
+        if len(Cell)<3 :
+            print GCostmap_data.data;
         resaultList = Block_chosser(Cell);
         block_index=resaultList[0];
         if block_index == -1:
@@ -208,7 +286,6 @@ class Explore_Block(smach.State):
         self.points = None;
         self.count = 0;
         self.pointNumber=0;
-        self.pointPub=rospy.Publisher("victim_location",PointStamped,queue_size=10);
 
     def odomCallback(data):
         pass;
@@ -244,20 +321,11 @@ class Explore_Block(smach.State):
                 i += 1;
             else:
                 odom_temp = Odom_data;
-            if current_victim_status=="victim detected" :
-                current_point=PointStamped();
-                current_point.header.stamp=rospy.Time.now();
-                current_point.header.seq=self.pointNumber;
-                self.pointNumber+=1;
-                current_point.header.frame_id = "/map";
-                current_point.point.z=0;
-                current_point.point.y=odom_temp.pose.pose.position.y;
-                current_point.point.x=odom_temp.pose.pose.position.x;
-                self.pointPub.publish(current_point);
-
+            if current_victim_status=="victim_detected" :
                 a = rospy.Publisher("move_base/cancel", GoalID, queue_size=10);
                 a.publish(GoalID());
                 rospy.sleep(30.0);
+                current_victim_status="no victim";
                 goal.target_pose.header.stamp = rospy.Time.now();
                 sac.send_goal(goal);
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
@@ -297,14 +365,14 @@ class Explore_Block(smach.State):
         a = userdata.EB_input;
         userdata.EB_output=a;
         if a.type == "Block" and self.count == 0:
-            print "aklsaklsdfjklsdjf111111111111111";
+            print "going to the center of the block";
             self.block = a;
             self.points = [ (a.center),(a.topLeft),(a.topRight),(a.bottomRight),(a.bottomLeft)];
             self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
             if self.status=="not explored yet" :
                 self.count+=1;
         elif a.type == "Block" and self.count > 0:
-            print "aklsaklsdfjklsdjf2222222222";
+            print "going for the points";
             self.move_to_goal(self.points[self.count].x,self.points[self.count].y);
             if self.status=="not explored yet" :
                 self.count+=1;
@@ -396,7 +464,6 @@ class GOTO_Goal(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo("Executing state GOTO_Goal");
-
         a = "taher";
         if a == "javadi":
             return "goal_reached";
@@ -437,8 +504,10 @@ class a_simple_state(smach.State):
 
 
 def main():
-    rospy.sleep(5);
     # Create the top level SMACH state machine
+    listener_goal_status();
+    rospy.sleep(5);
+
     sm_exploration = smach.StateMachine(outcomes=["hold", "shut_down"]);
 
     # Open the container
@@ -475,22 +544,10 @@ def main():
         # Execute SMACH plan
     aut_explore = sm_exploration.execute();
 
-def elemntryMove(x,y):
-        sac = actionlib.SimpleActionClient("move_base", MoveBaseAction);
-        goal = MoveBaseGoal();
-        goal.target_pose.pose.position.x = float(x);
-        goal.target_pose.pose.position.y = float(y);
-        goal.target_pose.pose.orientation.w = 1.0;
-        goal.target_pose.header.frame_id = robotnamespace + "/odom";
-        goal.target_pose.header.stamp = rospy.Time.now();
-        sac.wait_for_server();
-        sac.send_goal(goal);
-        sac.wait_for_result();
-
 
 
 if __name__ == '__main__':
     rospy.init_node('smach_example_state_machine');
     robotnamespace = rospy.get_param("namespace");
-    elemntryMove(rospy.get_param("explore_client/xofgoal"),rospy.get_param("explore_client/yofgoal"));
     main();
+    rospy.spin();
