@@ -103,7 +103,7 @@ def Block_chosser(mapdata):
 
 
 
-class Point():
+class myPoint():
     def __init__(self, xVector, yVector):
         self.type = "Point";
         self.resault = None;
@@ -173,11 +173,11 @@ class Chose_block(smach.State):
         else:
             cx = x_gc / 10.0 + (block_index % 3) * 18.0 + 9.0;
             cy = y_gc / 10.0 + (int(block_index / 3)) * 18.0 + 9.0;
-            self.center = Point(cx, cy);
-            self.topLeft = Point(cx - 7, cy + 7);
-            self.topRight = Point(cx + 7, cy + 7);
-            self.bottomRight = Point(cx + 7, cy - 7);
-            self.bottomLeft = Point(cx - 7, cy - 7);
+            self.center = myPoint(cx, cy);
+            self.topLeft = myPoint(cx - 7, cy + 7);
+            self.topRight = myPoint(cx + 7, cy + 7);
+            self.bottomRight = myPoint(cx + 7, cy - 7);
+            self.bottomLeft = myPoint(cx - 7, cy - 7);
             self.block = Block(self.center, self.topLeft, self.topRight, self.bottomRight, self.bottomLeft,
                                Cell[block_index]);
 
@@ -202,6 +202,8 @@ class Explore_Block(smach.State):
         self.status = None;
         self.points = None;
         self.count = 0;
+        self.pointNumber=0;
+        self.pointPub=rospy.Publisher("victim_location",PointStamped,queue_size=10);
 
     def odomCallback(data):
         pass;
@@ -235,6 +237,16 @@ class Explore_Block(smach.State):
             else:
                 odom_temp = Odom_data;
             if current_victim_status=="victim detected" :
+                current_point=PointStamped();
+                current_point.header.stamp=rospy.Time.now();
+                current_point.header.seq=self.pointNumber;
+                self.pointNumber+=1;
+                current_point.header.frame_id = "/map";
+                current_point.point.z=0;
+                current_point.point.y=odom_temp.pose.pose.position.y;
+                current_point.point.x=odom_temp.pose.pose.position.x;
+                self.pointPub.publish(current_point);
+
                 a = rospy.Publisher("move_base/cancel", GoalID, queue_size=10);
                 a.publish(GoalID());
                 rospy.sleep(30.0);
@@ -308,7 +320,7 @@ class Conntact_master(smach.State):
 
     def sub_callBack(self,data):
         rospy.loginfo("sub_callBack");
-        self.goal=Point(data.pose.pose.position.x,data.pose.pose.position.y);
+        self.goal=myPoint(data.pose.pose.position.x,data.pose.pose.position.y);
         if data.pose.pose.position.z==10 :
             self.goal.resault="found";
 
