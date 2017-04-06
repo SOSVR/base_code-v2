@@ -73,7 +73,7 @@
     if (detect->objects[0].label == "Human"){
       ROS_INFO("object found! \n");
       int xOfVictimFromMiddle = detect-> objects[0].centroid_x - 140;
-      int middleBeam = (xOfVictimFromMiddle / 280) * 360 + 360;
+      int middleBeam = (int)((xOfVictimFromMiddle / 280) * 360 * (62.4/260)) + 360;
       dist = computeDistance(middleBeam);
       if (checkVictim()){
         ROS_INFO("new victim! \n");
