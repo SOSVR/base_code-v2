@@ -21,7 +21,7 @@ from rail_object_detector.msg import *;
 
 
 
-
+markers=[];
 detectiontime=-1;
 victims=[];
 markcounter=0;
@@ -52,6 +52,18 @@ def elemntryMove(x,y):
         sac.wait_for_server();
         sac.send_goal(goal);
         sac.wait_for_result();
+def victim_callback(data):
+    global markcounter;
+    global current_victim_status;
+    global victims;
+    global detectiontime;
+    if len(data.objects)>0 and rospy.get_time()-detectiontime> 10 :
+        if data.objects[0].label=="Human" :
+            detectiontime=rospy.get_time();
+            x=Odom_data.pose.pose.position.x;
+            y=Odom_data.pose.pose.position.y;
+            rospy.loginfo("victim detected at %f in the position %f--%f",detectiontime,x,y);
+    #if data.
 
 def victim_callback(data):
     global markcounter;
@@ -131,8 +143,6 @@ def in_range(x, y, w, z):
 def setOdom(rawodomdata):
     global Odom_data;
     Odom_data = rawodomdata;
-
-
 
 def setMap(costmap_data):
     global GCostmap_data;
@@ -242,10 +252,10 @@ class Chose_block(smach.State):
         # goes in this
         # commented lines and points are created
         #
-        lenght = local_variable.info.width ;
+        lenght = local_variable.info.width * 10;
         x = (Odom_data.pose.pose.position.x - local_variable.info.origin.position.x) * 10;
         y = (Odom_data.pose.pose.position.y - local_variable.info.origin.position.y) * 10;
-        lenght2 = local_variable.info.height ;
+        lenght2 = local_variable.info.height * 10;
         if x < 275:
             x_gc = 0;
         elif x > lenght - 275:
@@ -352,7 +362,9 @@ class Explore_Block(smach.State):
                 goal.target_pose.header.stamp = rospy.Time.now();
                 sac.send_goal(goal);
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
-               rospy.sleep(0.4);
+                rospy.sleep(0.4);
+
+
                if current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
                   current_goal_status=43;
                   px=PxCalculator(self.block.matrix);
