@@ -17,7 +17,12 @@ from move_base_msgs.msg import *;
 from smach_ros import ServiceState;
 from std_msgs.msg import Header;
 from tf import TransformListener;
+from rail_object_detector.msg import *;
 
+
+
+
+detectiontime=-1;
 victims=[];
 markcounter=0;
 move_base_cancel=None;
@@ -52,8 +57,16 @@ def victim_callback(data):
     global markcounter;
     global current_victim_status;
     global victims;
-    victims.insert(len(victims),Odom_data.pose.pose.position);
-    current_victim_status="victim_detected";
+    global detectiontime;
+    if len(data.objects)>0 and rospy.get_time()-detectiontime> 10 :
+        if data.objects[0].label=="Human" :
+            detectiontime=rospy.get_time();
+            x=Odom_data.pose.pose.position.x;
+            y=Odom_data.pose.pose.position.y;
+            rospy.loginfo("victim detected at %f in the position %f--%f",detectiontime,x,y);
+    #if data.
+     #  victims.insert(len(victims),Odom_data.pose.pose.position);
+      # current_victim_status="victim_detected";
 
 
 
@@ -222,15 +235,17 @@ class Chose_block(smach.State):
 
     def Calculations(self):
         global GCostmap_data;
+        global Odom_data;
+        local_variable =GCostmap_data;
         rospy.loginfo("calculationg");
         # our code
         # goes in this
         # commented lines and points are created
         #
-        lenght = GCostmap_data.info.width * 10;
-        x = (Odom_data.pose.pose.position.x - GCostmap_data.info.origin.position.x) * 10;
-        y = (Odom_data.pose.pose.position.y - GCostmap_data.info.origin.position.y) * 10;
-
+        lenght = local_variable.info.width ;
+        x = (Odom_data.pose.pose.position.x - local_variable.info.origin.position.x) * 10;
+        y = (Odom_data.pose.pose.position.y - local_variable.info.origin.position.y) * 10;
+        lenght2 = local_variable.info.height ;
         if x < 275:
             x_gc = 0;
         elif x > lenght - 275:
@@ -239,16 +254,23 @@ class Chose_block(smach.State):
             x_gc = int(x) - 270;
         if y < 275:
             y_gc = 0;
-        elif y > lenght - 275:
-            y_gc = int(lenght - 275);
+        elif y > lenght2 - 275:
+            y_gc = int(lenght2 - 275);
         else:
             y_gc = int(y) - 270;
 
         Cell = [];
         for i in range(0, 180):
-            Cell.extend(GCostmap_data.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght]);
+            Cell.extend(local_variable.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght]);
+            if i == 90 :
+                print "oh yeh";
+                print (y_gc + i) * lenght;
+                print len(local_variable.data);
         if len(Cell)<3 :
-            print GCostmap_data.data;
+            print "oh yeh";
+            print local_variable.info.width;
+            print local_variable.info.height;
+            print y_gc;
         resaultList = Block_chosser(Cell);
         block_index=resaultList[0];
         if block_index == -1:
@@ -296,6 +318,7 @@ class Explore_Block(smach.State):
         global current_victim_status;
         sac = actionlib.SimpleActionClient("move_base", MoveBaseAction);
         print "aklsaklsdfjklsdjf3333333333333";
+
         # create goal
         goal = MoveBaseGoal();
 
@@ -329,15 +352,18 @@ class Explore_Block(smach.State):
                 goal.target_pose.header.stamp = rospy.Time.now();
                 sac.send_goal(goal);
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
-                px=PxCalculator(self.block.matrix);
-                if px >75 :
-                    self.status="fully explored";
-                    print "fully explored move base finished";
-                    return;
-                else:
-                    self.status="not explored yet";
-                    print "not explored yet move base finished";
-                    return ;
+               rospy.sleep(0.4);
+               if current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
+                  current_goal_status=43;
+                  px=PxCalculator(self.block.matrix);
+                  if px >75 :
+                      self.status="fully explored";
+                      print "fully explored move base finished";
+                      return;
+                  else:
+                      self.status="not explored yet";
+                      print "not explored yet move base finished";
+                      return ;
             elif i==900 :
                 i=0;
                 px = PxCalculator(self.block.matrix);
