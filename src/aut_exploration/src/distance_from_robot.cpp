@@ -24,6 +24,7 @@
   };
   std::vector<victLocation> victims;
    void send_message(){
+      ROS_INFO("VVVVIIIICCCCTTTTIIIIMMMM");
       std_msgs::String vict;
       vict.data = "victim";
       victPub.publish(vict);
@@ -78,6 +79,7 @@
         ROS_INFO("new victim! \n");
         victims.push_back(getVictimLocation());
         send_message();
+        /** MARKER SHOULD BE HERE */
       }
     }
     else{
@@ -118,7 +120,6 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
   ros::Subscriber scanSub;
   ros::Subscriber victSub;
-
   ros::Subscriber robotPoseSub;
   scanSub = nh.subscribe<sensor_msgs::LaserScan>("/sos1/hokuyo",10,processLaserScanCallback);
   victSub = nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,processDetectionsCallback);
