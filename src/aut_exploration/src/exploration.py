@@ -52,6 +52,7 @@ def elemntryMove(x,y):
         sac.wait_for_server();
         sac.send_goal(goal);
         sac.wait_for_result();
+
 def victim_callback(data):
     global markcounter;
     global current_victim_status;
@@ -398,7 +399,7 @@ class Explore_Block(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo("Executing state Explore_Center");
-        print self.count
+        print self.count;
         print "this was the number that you expected"
         a = userdata.EB_input;
         userdata.EB_output=a;

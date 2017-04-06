@@ -70,22 +70,28 @@
   }
   void processDetectionsCallback(const rail_object_detector::Detections::ConstPtr& detect){
     ROS_INFO("detections called! \n");
-    if (detect->objects[0].label == "Human"){
-      ROS_INFO("object found! \n");
-      int xOfVictimFromMiddle = detect-> objects[0].centroid_x - 140;
-      int middleBeam = (int)((xOfVictimFromMiddle / 280) * 360 * (62.4/260)) + 360;
-      dist = computeDistance(middleBeam);
-      if (checkVictim()){
-        ROS_INFO("new victim! \n");
-        victims.push_back(getVictimLocation());
-        send_message();
-        /** MARKER SHOULD BE HERE */
-      }
+     std::vector<rail_object_detector::Object> obi = detect->objects;
+    if(obi.size() > 0)
+    {
+      if (obi[0].label == "Human"){
+        ROS_INFO("object found! \n");
+        int xOfVictimFromMiddle = obi[0].centroid_x - 140;
+        int middleBeam = (int)((xOfVictimFromMiddle / 280) * 360 * (62.4/260)) + 360;
+        dist = computeDistance(middleBeam);
+        if (checkVictim()){
+           ROS_INFO("new victim! \n");
+          victims.push_back(getVictimLocation());
+          send_message();
+          /** MARKER SHOULD BE HERE */
+          return;
+        }
     }
     else{
       dist = -1;
       ROS_INFO("dist seted on -1 ! \n");
+      }
     }
+    ROS_INFO("size !> 0    \n");
   }
   void robotPoseInitialCallback(const nav_msgs::Odometry::ConstPtr& msg){
     robotX = msg->pose.pose.position.x;
