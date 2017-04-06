@@ -53,6 +53,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_message_files(
    FILES
    Block_msgs.msg
+   Detections.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -74,6 +75,9 @@ generate_messages(
   DEPENDENCIES
   nav_msgs  sensor_msgs   std_msgs
 )
+
+add_executable(victim_node src/distance_from_robot.cpp)
+target_link_libraries(victim_node ${catkin_LIBRARIES})
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
