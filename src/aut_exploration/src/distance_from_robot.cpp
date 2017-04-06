@@ -63,11 +63,12 @@
     return true;
   }
   
-  void processLaserScan(const sensor_msgs::LaserScan::ConstPtr& scan){
+  void processLaserScanCallback(const sensor_msgs::LaserScan::ConstPtr& scan){
+       ROS_INFO("ranges copying! \n");
        range = scan->ranges;
        ROS_INFO("ranges copied! \n");
   }
-  void processDetections(const rail_object_detector::Detections::ConstPtr& detect){
+  void processDetectionsCallback(const rail_object_detector::Detections::ConstPtr& detect){
     if (detect->objects[0].label == "Human"){
       ROS_INFO("object found! \n");
       int xOfVictimFromMiddle = detect-> objects[0].centroid_x - 140;
@@ -84,7 +85,8 @@
       ROS_INFO("dist seted on -1 ! \n");  
     }
   }
-  void robotPoseInitial(const nav_msgs::Odometry::ConstPtr& msg){
+  void robotPoseInitialCallback(const nav_msgs::Odometry::ConstPtr& msg){
+    ROS_INFO("robot location is initialising!  \n");
     robotX = msg->pose.pose.position.x;
     robotY = msg->pose.pose.position.y;
     tf::Pose pose;
@@ -97,9 +99,9 @@
     ros::Subscriber scanSub;
     ros::Subscriber victSub;
     ros::Subscriber robotPoseSub;
-    scanSub=nh.subscribe<sensor_msgs::LaserScan>("/base_scan",10,processLaserScan);
-    victSub=scanSub=nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,processDetections);
-    robotPoseSub=nh.subscribe<nav_msgs::Odometry>("/sos1/odom",10,robotPoseInitial);
+    scanSub=nh.subscribe<sensor_msgs::LaserScan>("/sos1/base_scan",10,processLaserScanCallback);
+    victSub=scanSub=nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,processDetectionsCallback);
+    robotPoseSub=nh.subscribe<nav_msgs::Odometry>("/sos1/odom",10,robotPoseInitialCallback);
     victPub = nh.advertise<std_msgs::String>("/victim_detected", 10);
     ROS_INFO("firstInit done! \n");
   }
