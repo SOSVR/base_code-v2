@@ -52,7 +52,7 @@ def elemntryMove(x,y):
         sac.wait_for_server();
         sac.send_goal(goal);
         sac.wait_for_result();
-def victim_callback(data):
+def victim_callback2(data):
     global markcounter;
     global current_victim_status;
     global victims;
@@ -83,8 +83,9 @@ def victim_callback(data):
 
 
 def mark_location(x, y, mark_id):
+    global markers;
     shape = Marker.CUBE;
-    pub = rospy.Publisher('visualization_marker', Marker, queue_size=100)
+    pub = rospy.Publisher('visualization_marker', MarkerArray, queue_size=100)
     rate = rospy.Rate(10) # 10hz
 
     marker = Marker()
@@ -122,7 +123,7 @@ def mark_location(x, y, mark_id):
     marker.color.a = 1.0
 
     marker.lifetime = rospy.Duration()
-
+    markers.insert(len(markers),marker);
 
     rospy.loginfo(marker)
     rate.sleep()
@@ -252,10 +253,10 @@ class Chose_block(smach.State):
         # goes in this
         # commented lines and points are created
         #
-        lenght = local_variable.info.width * 10;
+        lenght = local_variable.info.width ;
         x = (Odom_data.pose.pose.position.x - local_variable.info.origin.position.x) * 10;
         y = (Odom_data.pose.pose.position.y - local_variable.info.origin.position.y) * 10;
-        lenght2 = local_variable.info.height * 10;
+        lenght2 = local_variable.info.height ;
         if x < 275:
             x_gc = 0;
         elif x > lenght - 275:
@@ -363,8 +364,6 @@ class Explore_Block(smach.State):
                 sac.send_goal(goal);
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
                 rospy.sleep(0.4);
-
-
                if current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
                   current_goal_status=43;
                   px=PxCalculator(self.block.matrix);
@@ -544,7 +543,7 @@ class a_simple_state(smach.State):
 def main():
     # Create the top level SMACH state machine
     listener_goal_status();
-    rospy.sleep(5);
+    rospy.sleep(2);
 
     sm_exploration = smach.StateMachine(outcomes=["hold", "shut_down"]);
 

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+<include file="$(find gazebo_ros)/launch/empty_world.launch">
+
+	<!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+	<!--    <arg name="world_name" value="worlds/RC2016VRL_port1.world"/> -->
+
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="verbose" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+
+</include>
+
+</launch>
