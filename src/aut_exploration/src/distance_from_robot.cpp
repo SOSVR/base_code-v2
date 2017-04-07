@@ -1,4 +1,3 @@
-
 #include <cstdlib>
 #include <unistd.h>
 #include <stdio.h>
@@ -15,8 +14,8 @@
 #define PI 3.14159265
   std::vector<float> range;
   double dist = -1;
-  int robotX = 0;
-  int robotY = 0;
+  double robotX = 0;
+  double robotY = 0;
   ros::Publisher victPub;
   double yaw_angle = 0;
 
@@ -29,21 +28,17 @@
       geometry_msgs::Point point;
       point.x = vl.x;
       point.y = vl.y;
+      ROS_INFO("x = %f, y = %f ",vl.x, vl.y);
       victPub.publish(point);
     }
-    double computeDistance(int middle){
-    int one;
-    int two;
-    if (middle - 3 >= 0)
-      one = middle - 3;
-    else
-      one = middle + 6;
-    if (middle + 3 <= 719)
-      one = middle + 3;
-    else
-      one = middle - 6;
+    double computeDistance(int left,int middle){
+    double min = 30.0;
+    ROS_INFO("left %d, middle %d ",left,middle);
+    for (int i = left; i <= middle; i++)
+      if((range[i] <= min)&&(range[i] >= 1))
+        min = range[i];
     ROS_INFO("distance calculated!  \n");
-    return (double)((range[one] + range[two] + range[middle])/3);
+    return min;
   }
   victLocation getVictimLocation(){
     if (dist == -1)
@@ -78,8 +73,14 @@
       if (obi[0].label == "Human"){
         ROS_INFO("object found! \n");
         int xOfVictimFromMiddle = obi[0].centroid_x - 140;
-        int middleBeam = (int)((xOfVictimFromMiddle / 280) * 360 * (62.4/260)) + 360;
-        dist = computeDistance(middleBeam);
+        int middleBeam = (double)(((double)xOfVictimFromMiddle / 280) * 720 * (62.4/260)) + (double)360;
+        int left = obi[0].left_bot_x - 140;
+        int leftBeam = (double)(((double)left / 280) * 720 * (62.4/260)) + (double)360;
+        ROS_INFO("left %d, xOfVictimFromMiddle %d ",left,xOfVictimFromMiddle);
+
+
+        dist = computeDistance(leftBeam,middleBeam);
+        ROS_INFO("distance is : %f",dist);
         if (checkVictim()){
            ROS_INFO("new victim! \n");
           victims.push_back(getVictimLocation());
