@@ -57,11 +57,15 @@ def victim_callback2(data):
     global current_victim_status;
     global victims;
     global detectiontime;
-    x=data.x;
-    y=data.y;
-    mark_location(x,y,markcounter);
-    markcounter+=1;
-    rospy.loginfo("victim detected at %f in the position %f--%f",detectiontime,x,y);
+    if  rospy.get_time()-detectiontime > 20 :
+       print "vitim ditedted baby #######"
+       detectiontime=rospy.get_time();
+       x=data.x;
+       y=data.y;
+       mark_location(x,y,markcounter);
+       current_victim_status="victim_detected";
+       markcounter+=1;
+       rospy.loginfo("victim detected at %f in the position %f--%f",detectiontime,x,y);
     #if data.
 
 def victim_callback(data):
@@ -364,7 +368,8 @@ class Explore_Block(smach.State):
             if current_victim_status=="victim_detected" :
                 a = rospy.Publisher("move_base/cancel", GoalID, queue_size=10);
                 a.publish(GoalID());
-                rospy.sleep(30.0);
+                print "goal cancel shode aziam";
+                rospy.sleep(15.0);
                 current_victim_status="no victim";
                 goal.target_pose.header.stamp = rospy.Time.now();
                 sac.send_goal(goal);
