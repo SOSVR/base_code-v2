@@ -57,12 +57,11 @@ def victim_callback2(data):
     global current_victim_status;
     global victims;
     global detectiontime;
-    if len(data.objects)>0 and rospy.get_time()-detectiontime> 10 :
-        if data.objects[0].label=="Human" :
-            detectiontime=rospy.get_time();
-            x=Odom_data.pose.pose.position.x;
-            y=Odom_data.pose.pose.position.y;
-            rospy.loginfo("victim detected at %f in the position %f--%f",detectiontime,x,y);
+    x=data.x;
+    y=data.y;
+    mark_location(x,y,markcounter);
+    markcounter+=1;
+    rospy.loginfo("victim detected at %f in the position %f--%f",detectiontime,x,y);
     #if data.
 
 def victim_callback(data):
@@ -81,12 +80,17 @@ def victim_callback(data):
       # current_victim_status="victim_detected";
 
 
-
 def mark_location(x, y, mark_id):
     global markers;
     shape = Marker.CUBE;
     pub = rospy.Publisher('visualization_marker', MarkerArray, queue_size=100)
-    rate = rospy.Rate(10) # 10hz
+
+    for i in range(0,len(markers)):
+        if in_range(x,y,markers[i].pose.position.x,markers[i].pose.position.y) < 4 :
+            return;
+
+
+
 
     marker = Marker()
     marker.header.frame_id = "/map"
@@ -125,11 +129,13 @@ def mark_location(x, y, mark_id):
     marker.lifetime = rospy.Duration()
     markers.insert(len(markers),marker);
 
-    rospy.loginfo(marker)
-    rate.sleep()
-    while not rospy.is_shutdown():
-        pub.publish(marker)
-        rate.sleep()
+    rospy.loginfo(marker);
+    pub.publish(markers);
+
+    #rate.sleep()
+    #while not rospy.is_shutdown():
+    #    pub.publish(marker)
+    #    rate.sleep()
 
 
 def cancel_publisher():
@@ -173,7 +179,7 @@ def listener_goal_status():
     rospy.Subscriber("move_base/status", GoalStatusArray, callback_goal_status);
     rospy.Subscriber("odom", Odometry, setOdom);
     rospy.Subscriber("move_base/global_costmap/costmap", OccupancyGrid, setMap);
-    rospy.Subscriber("victim_detected",Point,victim_callback);
+    rospy.Subscriber("victim_detected",Point,victim_callback2);
 
 
 
@@ -363,7 +369,7 @@ class Explore_Block(smach.State):
                 goal.target_pose.header.stamp = rospy.Time.now();
                 sac.send_goal(goal);
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
-                rospy.sleep(0.4);
+               rospy.sleep(0.4);
                if current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
                   current_goal_status=43;
                   px=PxCalculator(self.block.matrix);
