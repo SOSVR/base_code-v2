@@ -6,6 +6,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
 #include <geometry_msgs/Twist.h>
+#include <geometry_msgs/Point.h>
 #include <nav_msgs/Odometry.h>
 #include <rail_object_detector/Detections.h>
 #include <rail_object_detector/Object.h>
@@ -23,11 +24,12 @@
     double x,y;
   };
   std::vector<victLocation> victims;
-   void send_message(){
+   void send_message(victLocation vl){
       ROS_INFO("VVVVIIIICCCCTTTTIIIIMMMM");
-      std_msgs::String vict;
-      vict.data = "victim";
-      victPub.publish(vict);
+      geometry_msgs::Point point;
+      point.x = vl.x;
+      point.y = vl.y;
+      victPub.publish(point);
     }
     double computeDistance(int middle){
     int one;
@@ -81,7 +83,7 @@
         if (checkVictim()){
            ROS_INFO("new victim! \n");
           victims.push_back(getVictimLocation());
-          send_message();
+          send_message(getVictimLocation());
           /** MARKER SHOULD BE HERE */
           return;
         }
@@ -131,7 +133,7 @@ int main(int argc, char **argv)
   victSub = nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,processDetectionsCallback);
   //victSub = nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,helloWorld);
   robotPoseSub = nh.subscribe<nav_msgs::Odometry>("/sos1/odom",10,robotPoseInitialCallback);
-  victPub = nh.advertise<std_msgs::String>("/victim_detected", 10);
+  victPub = nh.advertise<geometry_msgs::Point>("/victim_detected", 10);
   ROS_INFO("firstInit done! \n");
   while (ros::ok())
   {
