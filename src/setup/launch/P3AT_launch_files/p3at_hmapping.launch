@@ -20,6 +20,8 @@
 
 
   <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" >
+
+    <param name="use_tf_pose_start_estimate" value="true" />
     <param name="map_start_x" value="0.5"/>
     <param name="map_start_y" value="0.5" />
     <param name="map_size" value="800"/>
