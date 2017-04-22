@@ -1,5 +1,19 @@
 #!/usr/bin/env python
 
+
+# this file is a behavoir that we have created to to run a robot in full autonomous mode
+# to do that we are using a stat machine created using the smach class of python
+# using the smach is the main reasen we are using the python
+# the robot will try to explore the it's global costmap by picking a 36 by 36 meter square and then it divides it into
+# 9 smaller 18 by 18 meter blockes ...the robot it self is in the center block
+# meaning the block with index of 4
+# then the robot will calculate which one these blocks is explored less and the chossen block must be under 75 % explored
+# after picking a cell the robot will try to visit the center and corners of the cell during this process the cell will be most probobly explored by more than 75 %
+# so after that the robot will try to chose another cell and get explore it
+# if by any chance all the 9 cells within the block are explored more than 75% then it will contact the master and try to get to somewhere that has no been explored yet
+# when robot is moving if the robot detects a victim then the robot will enter the a state called victim detected and there
+# inside that state it will wait for several seconds and then move
+# however if before coming to this state robot will check to see if it has already seen the victim and then after that it will move on
 import roslib;
 import rospy;
 import smach;
@@ -17,7 +31,7 @@ from move_base_msgs.msg import *;
 from smach_ros import ServiceState;
 from std_msgs.msg import Header;
 from tf import TransformListener;
-from rail_object_detector.msg import *;
+#from rail_object_detector.msg import *;
 
 
 
@@ -53,10 +67,10 @@ def victim_callback2(data):
     global victims;
     global detection_time;
     if  rospy.get_time()-detection_time > 20 :
-       print ("vitim detected baby #######");
-       detection_time=rospy.get_time();
        x=data.x;
        y=data.y;
+       print ("possible victim detected at x={} and y={}".format(x,y));
+       detection_time=rospy.get_time();
        conform=mark_location(x,y,mark_counter);
        if conform == "invalid":
            return;
@@ -141,7 +155,7 @@ def mark_location(x, y, mark_id):
 
 def cancel_publisher():
     global move_base_cancel;
-    move_base_cancel=rospy.Publisher("move_base/cancel",GoalID,10);
+    move_base_cancel=rospy.Publisher("move_base/cancel",GoalID,queue_size=10);
 
 
 def in_range(x, y, w, z):
@@ -454,7 +468,7 @@ class ConntactMaster(smach.State):
         smach.State.__init__(self, outcomes=["goal_received", "NOT_received", "map_fully_explored"],
                              input_keys=["CM_input"], output_keys=["CM_output"]);
         self.goal = None;
-        self.pub=rospy.Publisher("requet_of_goal",Odometry,10);
+        self.pub=rospy.Publisher("requet_of_goal",Odometry,queue_size=10);
         self.sub=rospy.Subscriber("respans_from_master",Odometry,self.sub_callBack);
         self.goal=None;
 
@@ -637,9 +651,8 @@ def main():
     aut_explore = sm_exploration.execute();
 
 
-
 if __name__ == '__main__':
     rospy.init_node('smach_example_state_machine');
-    robot_name_space = rospy.get_param("namespace");
+    robot_name_space = rospy.get_param("namespace", default="sos1");
     main();
     rospy.spin();
