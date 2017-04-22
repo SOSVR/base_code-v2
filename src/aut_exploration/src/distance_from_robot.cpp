@@ -12,17 +12,20 @@
 #include <std_msgs/String.h>
 #include <tf/transform_datatypes.h>
 #define PI 3.14159265
+//each laser beam hits an obstancle, so the distance is in a vector
   std::vector<float> range;
   double dist = -1;
   double robotX = 0;
   double robotY = 0;
   ros::Publisher victPub;
   double yaw_angle = 0;
-
+//x and y of victim position
   struct victLocation {
     double x,y;
   };
+//array of victims, so using this array assures us that a victim which is detected before, will not be detected next time
   std::vector<victLocation> victims;
+//this function sends x and y of NEW victim to through a rostopic
    void send_message(victLocation vl){
       ROS_INFO("VVVVIIIICCCCTTTTIIIIMMMM");
       geometry_msgs::Point point;
@@ -31,7 +34,9 @@
       ROS_INFO("x = %f, y = %f ",vl.x, vl.y);
       victPub.publish(point);
     }
+//this function checks all member of ranges array(from left of object to its //should_be_right middle ***) and returns minimum distance of them
     double computeDistance(int left,int middle){
+    // *** should change when laser changes
     double min = 30.0;
     ROS_INFO("left %d, middle %d ",left,middle);
     for (int i = left; i <= middle; i++)
@@ -40,6 +45,7 @@
     ROS_INFO("distance calculated!  \n");
     return min;
   }
+//this function computes a detected victim's location so that we can check if it is detected before or not(now just for one robot ***)
   victLocation getVictimLocation(){
     if (dist == -1)
       ROS_INFO("dist = -1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
@@ -51,6 +57,7 @@
     ROS_INFO("victim location is :  \n");
     return vl;
   }
+//checks if victim which is detected now, is a new or one detected in the past
   bool checkVictim(){
       victLocation vl = getVictimLocation();
       for (std::vector<victLocation>::iterator it = victims.begin() ; it != victims.end(); ++it)
@@ -61,10 +68,11 @@
     ROS_INFO("checkVictim resulted true! \n");
     return true;
   }
-
+ //copies laser ranges array(which there is distance to obstancle for each beam)
   void processLaserScanCallback(const sensor_msgs::LaserScan::ConstPtr& scan){
        range = scan->ranges;
   }
+//if rail object detector published sth, it will be check human and being repetitious
   void processDetectionsCallback(const rail_object_detector::Detections::ConstPtr& detect){
     ROS_INFO("detections called! \n");
      std::vector<rail_object_detector::Object> obi = detect->objects;
@@ -77,8 +85,6 @@
         int left = obi[0].left_bot_x - 140;
         int leftBeam = (double)(((double)left / 280) * 720 * (62.4/260)) + (double)360;
         ROS_INFO("left %d, xOfVictimFromMiddle %d ",left,xOfVictimFromMiddle);
-
-
         dist = computeDistance(leftBeam,middleBeam);
         ROS_INFO("distance is : %f",dist);
         if (checkVictim()){
@@ -103,19 +109,6 @@
     tf::poseMsgToTF(msg->pose.pose, pose);
     yaw_angle = tf::getYaw(pose.getRotation());
   }
-  // void firstInit(){
-  //   ros::NodeHandle nh;
-  //   ros::Subscriber scanSub;
-  //   ros::Subscriber victSub;
-  //   ros::Subscriber robotPoseSub;
-  //   scanSub=nh.subscribe<sensor_msgs::LaserScan>("/sos1/base_scan",10,processLaserScanCallback);
-  //   victSub=scanSub=nh.subscribe<rail_object_detector::Detections>("/detector_node/detections",10,processDetectionsCallback);
-  //   robotPoseSub=nh.subscribe<nav_msgs::Odometry>("/sos1/odom",10,robotPoseInitialCallback);
-  //   victPub = nh.advertise<std_msgs::String>("/victim_detected", 10);
-  //   ROS_INFO("firstInit done! \n");
-  // }
-/** needs to be optimised */
-
 void helloWorld(const rail_object_detector::Detections::ConstPtr& msg){
   ROS_INFO("HI!");
 }
