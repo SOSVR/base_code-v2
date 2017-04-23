@@ -234,9 +234,9 @@ def Block_chooser(mapdata):
 
 
 class MyPoint():
-    def __init__(self, xVector, yVector):
+    def __init__(self, xVector, yVector,inital_resault=None):
         self.type = "Point";
-        self.resault = None;
+        self.resault = inital_resault;
         self.x = xVector;
         self.y = yVector;
 
@@ -333,6 +333,7 @@ class ChoseBlock(smach.State):
         rospy.loginfo("Executing state Chose_block");
         a = self.Calculations();
         if a == "conntact the master":
+            userdata.CB_output=MyPoint(Odom_data.x,Odom_data.y,"request_goal");
             return "no_block_found";
         else:
             userdata.CB_output = self.block;
@@ -468,49 +469,59 @@ class ConntactMaster(smach.State):
         smach.State.__init__(self, outcomes=["goal_received", "NOT_received", "map_fully_explored"],
                              input_keys=["CM_input"], output_keys=["CM_output"]);
         self.goal = None;
-        self.pub=rospy.Publisher("requet_of_goal",Odometry,queue_size=10);
-        self.sub=rospy.Subscriber("respans_from_master",Odometry,self.sub_callBack);
-        self.goal=None;
+    def request_goal(self,current_pose):
+        rospy.wait_for_service("request_fargoal")
+        try:
+            goal_request_service = rospy.ServiceProxy("request_fargoal", FarGoal);
+            request=FarGoalRequest();
+            request.pose_x=current_pose.x;
+            request.pose_y=current_pose.y;
+            request.request_type="goal";
+            resp1 = goal_request_service(request);
+            if(resp1.response_type=="yourgoal"):
+                self.goal=MyPoint(resp1.goal_x,resp1.goal_y);
+                return "goal_received";
+            elif(resp1.response_type=="map_fully_explored"):
+                return "map_fully_explored";
+        except rospy.ServiceException, e:
+            return "NOT_received";
 
-    def sub_callBack(self,data):
-        rospy.loginfo("sub_callBack");
-        self.goal=MyPoint(data.pose.pose.position.x,data.pose.pose.position.y);
-        if data.pose.pose.position.z==10 :
-            self.goal.resault="found";
+
+    def request_different_goal(self,current_goal):
+        rospy.wait_for_service("request_fargoal")
+        try:
+            goal_request_service = rospy.ServiceProxy("request_fargoal", FarGoal);
+            request=FarGoalRequest();
+            request.pose_x=current_goal.x;
+            request.pose_y=current_goal.y;
+            request.request_type="new_goal";
+            resp1 = goal_request_service(request);
+            if(resp1.response_type=="yourgoal"):
+                self.goal=MyPoint(resp1.goal_x,resp1.goal_y);
+                return "goal_received";
+            elif(resp1.response_type=="map_fully_explored"):
+                return "map_fully_explored";
+        except rospy.ServiceException, e:
+            return "NOT_received";
 
 
 
 
     def execute(self, userdata):
         rospy.loginfo("Executing state Conntact_master");
-        r=rospy.Rate(1);
-        i=0;
         a = "taher";
-        while not rospy.is_shutdown() :
-
-            if i>20 :
-                userdata.CM_output=userdata.CM_output;
-                a=None;
-                self.goal=None;
-                break;
-            elif self.goal==None :
-                i+=1;
-            else:
-                userdata.CM_output=self.goal;
-                if self.goal.resault=="found":
-                     a="goal received"
-                else:
-                    a="map explored";
-                self.goal=None;
-                break;
-            r.sleep();
-
-
+        if(userdata.CM_input.type=="Point"):
+            if userdata.CM_input.resault=="request_goal":
+                a=self.request_goal(userdata.CM_input);
+            elif userdata.CM_input.resault=="stucked":
+                a=self.request_different_goal(userdata.CM_input);
         if a == "goal received":
+            userdata.CM_output=self.goal;
             return "goal_received";
-        elif a == "map explored":
+        elif a == "map_fully_explored":
             return "map_fully_explored";
         else:
+            userdata.CM_output=userdata.CM_input;
             return "NOT_received";
 
 
@@ -594,6 +605,7 @@ class GotoGoal(smach.State):
         rospy.loginfo("Executing state GOTO_Goal");
         if (userdata.GG_input.type=="Point"):
             move_to_goal(userdata.GG_input.x,userdata.GG_input.x);
+        userdata.GG_output=self.goal;
         if self.status=="goal_reached":
             return "goal_reached";
         elif self.status=="stucked":
@@ -725,6 +737,6 @@ def main():
 
 if __name__ == '__main__':
     rospy.init_node('smach_example_state_machine');
-    # robot_name_space = rospy.get_param("namespace", default="sos1");
-    # main();
-    # rospy.spin();
+    robot_name_space = rospy.get_param("namespace", default="sos1");
+    main();
+    rospy.spin();
