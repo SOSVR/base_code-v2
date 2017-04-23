@@ -133,13 +133,16 @@ catkin_package(
 # add_dependencies(setup ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
+
 # add_executable(setup_node src/setup_node.cpp)
- add_executable(odom_and_tf_node src/odom2tf.cpp)
- add_executable(image_node src/image.cpp)
- add_executable(inital_pose src/initial_pose_publisher.cpp)
- target_link_libraries(odom_and_tf_node ${catkin_LIBRARIES} )
- target_link_libraries(image_node ${catkin_LIBRARIES} )
- target_link_libraries(inital_pose ${catkin_LIBRARIES} )
+# add_executable(odom_and_tf_node src/odom2tf.cpp)
+# add_executable(image_node src/image.cpp)
+# add_executable(inital_pose src/initial_pose_publisher.cpp)
+# target_link_libraries(odom_and_tf_node ${catkin_LIBRARIES} )
+# target_link_libraries(image_node ${catkin_LIBRARIES} )
+# target_link_libraries(inital_pose ${catkin_LIBRARIES} )
+
+
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(setup_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

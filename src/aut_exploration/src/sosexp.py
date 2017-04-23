@@ -24,6 +24,7 @@ import math;
 from visualization_msgs.msg import Marker;
 from visualization_msgs.msg import MarkerArray;
 from aut_exploration.msg import *;
+from aut_exploration.srv import *;
 from geometry_msgs.msg import *;
 from nav_msgs.msg import *;
 from actionlib_msgs.msg import *;
@@ -543,10 +544,12 @@ class GotoGoal(smach.State):
         odom_temp = Odom_data;
         rate = rospy.Rate(3);  # 3hz
         i = 0;
+        j = 0;
         while not rospy.is_shutdown():
             i+=1;
             if odom_temp.pose.pose.position.x == Odom_data.pose.pose.position.x and odom_temp.pose.pose.position.y == Odom_data.pose.pose.position.y:
-                i += 1;
+                i += 2;
+                j += 1;
             else:
                 odom_temp = Odom_data;
             if current_victim_status=="victim_detected" :
@@ -555,28 +558,27 @@ class GotoGoal(smach.State):
                 return;
             elif current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
                rospy.sleep(0.4);
-               if current_goal_status==3 or current_goal_status==4 or current_goal_status==5 or current_goal_status==9:
+               if (current_goal_status==3 ):
+                  self.status="goal_reached";
                   current_goal_status=43;
-                  px=PxCalculator(self.block.matrix);
-                  if px >75 :
-                      self.status="fully explored";
-                      print ("fully explored move base finished");
-                      return;
-                  else:
-                      self.status="not explored yet";
-                      print ("not explored yet move base finished");
-                      return ;
+                  return;
+               elif (current_goal_status==4 or current_goal_status==5 or current_goal_status==9 ):
+                  current_goal_status=43;
+                  self.status="stucked";
+                  self.goal.resault="stucked";
+                  return;
+
             elif i==450 :
                 i=0;
-                px = PxCalculator(self.block.matrix);
-                if px > 75:
-                    self.status = "fully explored";
-                    print ("fully explored timed out");
-                    return;
-                else:
-                    self.status = "not explored yet";
-                    print ("not explored yet timed out");
-                    return;
+                j=0;
+                self.status="stucked";
+                self.goal.resault="stucked";
+                return;
+            elif j > 100 :
+                i=0;
+                j=0;
+                self.state="failed_toMOVE";
+                return;
 
             rate.sleep();
 
@@ -590,16 +592,15 @@ class GotoGoal(smach.State):
     def execute(self, userdata):
         self.status=None;
         rospy.loginfo("Executing state GOTO_Goal");
-        a = "taher";
         if (userdata.GG_input.type=="Point"):
-            a=move_to_goal(userdata.GG_input.x,userdata.GG_input.x);
-        if a == 3:
+            move_to_goal(userdata.GG_input.x,userdata.GG_input.x);
+        if self.status=="goal_reached":
             return "goal_reached";
-        elif a == 4:
+        elif self.status=="stucked":
             return "stucked";
-        elif a == 5:
+        elif self.status=="victim detected":
             return "victim detected" ;
-        else:
+        elif self.status=="failed_toMOVE":
             return "failed_toMOVE";
 
 
@@ -724,6 +725,6 @@ def main():
 
 if __name__ == '__main__':
     rospy.init_node('smach_example_state_machine');
-    robot_name_space = rospy.get_param("namespace", default="sos1");
-    main();
-    rospy.spin();
+    # robot_name_space = rospy.get_param("namespace", default="sos1");
+    # main();
+    # rospy.spin();

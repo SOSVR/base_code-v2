@@ -1,0 +1,7 @@
+float32 pose_x
+float32 pose_y
+string request_type
+---
+float32 goal_x
+float32 goal_y
+string response_type
