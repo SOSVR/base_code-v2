@@ -244,7 +244,7 @@ class MyPoint():
 
 class Block():
 
-    def __init__(self, center, tl, tr, br, bl, matrix):
+    def __init__(self, center, tl, tr, br, bl, matrix=[]):
         self.type = "Block";
         self.center = center;
         self.topLeft = tl;
