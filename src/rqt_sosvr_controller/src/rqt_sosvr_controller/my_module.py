@@ -8,7 +8,7 @@ from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
-from python_qt_binding.QtGui import QWidget
+from python_qt_binding.QtWidgets import QWidget
 from python_qt_binding.QtGui import QIcon
 from threading import Thread
 from time import sleep
