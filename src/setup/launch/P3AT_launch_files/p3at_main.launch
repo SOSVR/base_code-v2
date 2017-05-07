@@ -13,14 +13,14 @@
   </include>
 
 
-  <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_hmapping.launch">
     <arg name="robotname" value="sos1"/>
   </include>
 
 
-  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
+  <!--include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
     <arg name="robotname" value="sos1"/>
-  </include>
+  </include-->
 
   <include file="$(find setup)/launch/utility.launch" />
 

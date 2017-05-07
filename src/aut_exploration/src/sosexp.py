@@ -97,6 +97,9 @@ def victim_callback(data):
 
 
 def mark_location(x, y, mark_id):
+    #when we call this method , it checks the  array of existing markeres with the new marker
+    #and if the new marker is not within 4 meters of any of the existing markers 
+    #the new marker will be added to the arrey and it  will be shown on the rviz
     global markers;
     shape = Marker.CUBE;
     pub = rospy.Publisher('visualization_marker', MarkerArray, queue_size=100)
@@ -106,22 +109,16 @@ def mark_location(x, y, mark_id):
             return "invalid";
 
 
-
-
     marker = Marker()
     marker.header.frame_id = "/map"
     marker.header.stamp = rospy.Time.now()
 
-
     marker.ns = "basic_shapes"
     marker.id = mark_id
 
-
     marker.type = shape
 
-
     marker.action = Marker.ADD
-
 
     marker.pose.position.x = x
     marker.pose.position.y = y
@@ -131,11 +128,9 @@ def mark_location(x, y, mark_id):
     marker.pose.orientation.z = 0.0
     marker.pose.orientation.w = 1.0
 
-
     marker.scale.x = 0.5
     marker.scale.y = 0.5
     marker.scale.z = 0.5
-
 
     marker.color.r = 0.0
     marker.color.g = 1.0
