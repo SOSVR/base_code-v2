@@ -102,42 +102,42 @@ def mark_location(x, y, mark_id):
     #the new marker will be added to the arrey and it  will be shown on the rviz
     global markers;
     shape = Marker.CUBE;
-    pub = rospy.Publisher('visualization_marker', MarkerArray, queue_size=100)
+    pub = rospy.Publisher('visualization_marker', MarkerArray, queue_size=100);
 
     for i in markers:
         if in_range(x,y,i.pose.position.x,i.pose.position.y) < 4 :
             return "invalid";
 
 
-    marker = Marker()
-    marker.header.frame_id = "/map"
-    marker.header.stamp = rospy.Time.now()
+    marker = Marker();
+    marker.header.frame_id = robot_name_space+"/base_link";
+    marker.header.stamp = rospy.Time.now();
 
-    marker.ns = "basic_shapes"
-    marker.id = mark_id
+    marker.ns = "basic_shapes";
+    marker.id = mark_id;
 
-    marker.type = shape
+    marker.type = shape;
 
-    marker.action = Marker.ADD
+    marker.action = Marker.ADD;
 
-    marker.pose.position.x = x
-    marker.pose.position.y = y
-    marker.pose.position.z = 0
-    marker.pose.orientation.x = 0.0
-    marker.pose.orientation.y = 0.0
-    marker.pose.orientation.z = 0.0
-    marker.pose.orientation.w = 1.0
+    marker.pose.position.x = x;
+    marker.pose.position.y = y;
+    marker.pose.position.z = 0;
+    marker.pose.orientation.x = 0.0;
+    marker.pose.orientation.y = 0.0;
+    marker.pose.orientation.z = 0.0;
+    marker.pose.orientation.w = 1.0;
 
-    marker.scale.x = 0.5
-    marker.scale.y = 0.5
-    marker.scale.z = 0.5
+    marker.scale.x = 0.5;
+    marker.scale.y = 0.5;
+    marker.scale.z = 0.5;
 
-    marker.color.r = 0.0
-    marker.color.g = 1.0
-    marker.color.b = 0.0
-    marker.color.a = 1.0
+    marker.color.r = 0.0;
+    marker.color.g = 1.0;
+    marker.color.b = 0.0;
+    marker.color.a = 1.0;
 
-    marker.lifetime = rospy.Duration()
+    marker.lifetime = rospy.Duration();
     markers.insert(len(markers),marker);
 
     rospy.loginfo(marker);
