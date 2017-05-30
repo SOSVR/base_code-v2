@@ -13,7 +13,7 @@
   </include>
 
 
-  <include file="$(find setup)/launch/P3AT_launch_files/p3at_hmapping.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
     <arg name="robotname" value="sos1"/>
   </include>
 

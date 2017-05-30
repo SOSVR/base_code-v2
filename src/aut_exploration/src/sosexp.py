@@ -98,7 +98,7 @@ def victim_callback(data):
 
 def mark_location(x, y, mark_id):
     #when we call this method , it checks the  array of existing markeres with the new marker
-    #and if the new marker is not within 4 meters of any of the existing markers 
+    #and if the new marker is not within 4 meters of any of the existing markers
     #the new marker will be added to the arrey and it  will be shown on the rviz
     global markers;
     shape = Marker.CUBE;
@@ -110,7 +110,7 @@ def mark_location(x, y, mark_id):
 
 
     marker = Marker();
-    marker.header.frame_id = robot_name_space+"/base_link";
+    marker.header.frame_id = "/map";
     marker.header.stamp = rospy.Time.now();
 
     marker.ns = "basic_shapes";

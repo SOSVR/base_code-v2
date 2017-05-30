@@ -16,10 +16,11 @@
   std::vector<float> range;
   double dist = -1;
   double victim_angel=0;
+  double yaw_angle = 0;
+  double robot_angel=0;
   double robotX = 0;
   double robotY = 0;
   ros::Publisher victPub;
-  double yaw_angle = 0;
 //x and y of victim position
   struct victLocation {
     double x,y;
@@ -50,8 +51,9 @@
   victLocation getVictimLocation(){
     if (dist == -1)
       ROS_INFO("dist = -1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
-    double victX = 0 + dist * cos((0+victim_angel)*PI / 180);
-    double victY = 0 + dist * sin((0+victim_angel)*PI / 180);
+    ROS_INFO("this is the angel you expect %f  yaw %f  vic %f \n",(((yaw_angle+victim_angel)* 180/ PI)),yaw_angle,victim_angel);
+    double victX = robotX + dist * cos(((yaw_angle+victim_angel)));
+    double victY = robotY + dist * sin(((yaw_angle+victim_angel)));
     victLocation vl;
     vl.x = victX;
     vl.y = victY;
@@ -85,7 +87,7 @@
         int middleBeam = (double)(((double)xOfVictimFromMiddle / 280) * 720 * (62.4/260)) + (double)360;
         int left = obi[0].left_bot_x - 140;
         int leftBeam = (double)(((double)left / 280) * 720 * (62.4/260)) + (double)360;
-        victim_angel=(atan2(- xOfVictimFromMiddle,224.919405839)*180)/PI;
+        victim_angel=atan2(- xOfVictimFromMiddle,224.919405839);
         ROS_INFO("left %d, xOfVictimFromMiddle %d ",left,xOfVictimFromMiddle);
         dist = computeDistance(leftBeam,middleBeam);
         ROS_INFO("distance is : %f",dist);
@@ -108,6 +110,9 @@
     robotX = msg->pose.pose.position.x;
     robotY = msg->pose.pose.position.y;
     tf::Pose pose;
+    if (robotX==0 && robotY==0){
+       robot_angel=0;
+    }else{robot_angel=atan2(robotY,robotX);}
     tf::poseMsgToTF(msg->pose.pose, pose);
     yaw_angle = tf::getYaw(pose.getRotation());
   }
