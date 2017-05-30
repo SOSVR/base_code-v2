@@ -84,9 +84,9 @@
       if (obi[0].label == "Human"){
         ROS_INFO("object found! \n");
         int xOfVictimFromMiddle = obi[0].centroid_x - 140;
-        int middleBeam = (double)(((double)xOfVictimFromMiddle / 280) * 720 * (62.4/260)) + (double)360;
-        int left = obi[0].left_bot_x - 140;
-        int leftBeam = (double)(((double)left / 280) * 720 * (62.4/260)) + (double)360;
+        int middleBeam = (double)(((double)xOfVictimFromMiddle / 280) * 720 * (62.4/260)) + (double)360; // 280 = pixels in width 720 = number of rays 62.4=horizontal_fov of camera
+        int left = obi[0].left_bot_x - 140; // 140 = pixels in width /2;
+        int leftBeam = (double)(((double)left / 280) * 720 * (62.4/260)) + (double)360; // 360 = number of rays /2
         victim_angel=atan2(- xOfVictimFromMiddle,224.919405839);
         ROS_INFO("left %d, xOfVictimFromMiddle %d ",left,xOfVictimFromMiddle);
         dist = computeDistance(leftBeam,middleBeam);
