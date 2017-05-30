@@ -15,6 +15,7 @@
 //each laser beam hits an obstancle, so the distance is in a vector
   std::vector<float> range;
   double dist = -1;
+  double victim_angel=0;
   double robotX = 0;
   double robotY = 0;
   ros::Publisher victPub;
@@ -49,8 +50,8 @@
   victLocation getVictimLocation(){
     if (dist == -1)
       ROS_INFO("dist = -1 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n");
-    double victX = robotX + dist * cos(yaw_angle*PI / 180);
-    double victY = robotY + dist * sin(yaw_angle*PI / 180);
+    double victX = 0 + dist * cos((0+victim_angel)*PI / 180);
+    double victY = 0 + dist * sin((0+victim_angel)*PI / 180);
     victLocation vl;
     vl.x = victX;
     vl.y = victY;
@@ -84,6 +85,7 @@
         int middleBeam = (double)(((double)xOfVictimFromMiddle / 280) * 720 * (62.4/260)) + (double)360;
         int left = obi[0].left_bot_x - 140;
         int leftBeam = (double)(((double)left / 280) * 720 * (62.4/260)) + (double)360;
+        victim_angel=(atan2(- xOfVictimFromMiddle,224.919405839)*180)/PI;
         ROS_INFO("left %d, xOfVictimFromMiddle %d ",left,xOfVictimFromMiddle);
         dist = computeDistance(leftBeam,middleBeam);
         ROS_INFO("distance is : %f",dist);
@@ -129,8 +131,10 @@ int main(int argc, char **argv)
   robotPoseSub = nh.subscribe<nav_msgs::Odometry>("/sos1/odom",10,robotPoseInitialCallback);
   victPub = nh.advertise<geometry_msgs::Point>("/victim_detected", 10);
   ROS_INFO("firstInit done! \n");
+  int count=0;
   while (ros::ok())
   {
+
     ros::spinOnce();
     pub_rate.sleep();
   }
