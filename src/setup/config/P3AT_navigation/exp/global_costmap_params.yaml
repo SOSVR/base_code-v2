@@ -1,0 +1,15 @@
+global_costmap:
+  global_frame: odom
+  robot_base_frame: base_link
+  resolution: 0.1
+  rolling_window:             true
+  track_unknown_space:        true
+  width:                      40.0
+  height:                     40.0
+  origin_x:                   -20.0
+  origin_y:                    -20.0
+
+  plugins:
+     - {name: obstacles_costmap2d,       type: "costmap_2d::ObstacleLayer"}
+     - {name: obstacles_voxel_grid,      type: "costmap_2d::VoxelLayer"}
+     - {name: inflation,                 type: "costmap_2d::InflationLayer"}
