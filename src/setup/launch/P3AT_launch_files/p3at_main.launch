@@ -12,6 +12,9 @@
     <arg name="initialy" value="-10"/>
   </include>
 
+  <include file="$(find setup)/launch/P3AT_launch_files/exp_pto.launch">
+    <arg name="robotname" value="sos1"/>
+  </include>
 
   <include file="$(find setup)/launch/P3AT_launch_files/p3at_gmapping.launch">
     <arg name="robotname" value="sos1"/>
