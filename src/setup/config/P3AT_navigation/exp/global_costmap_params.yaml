@@ -11,5 +11,4 @@ global_costmap:
 
   plugins:
      - {name: obstacles_costmap2d,       type: "costmap_2d::ObstacleLayer"}
-     - {name: obstacles_voxel_grid,      type: "costmap_2d::VoxelLayer"}
      - {name: inflation,                 type: "costmap_2d::InflationLayer"}
