@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="robotname" default="sos1"/>
-  <group ns="$(arg robotname)">
-    <node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+
+    <node pkg="octomap_server" type="octomap_server_node" name="quad_octomap_server">
       <param name="resolution" value="0.1" />
 
       <!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
@@ -12,11 +11,12 @@
 
       <param name="filter_ground" value="true" />
 
-      <param name="base_frame_id" value="$(arg robotname)/base_link" />
+      <param name="base_frame_id" value="/base_footprint" />
 
-      <param name="sensor_model/max_range" value="15.0" />
+      <param name="ground_filter/plane_distance" value="0.1" />
+
+      <param name="sensor_model/max_range" value="20.0" />
       <!-- data source to integrate (PointCloud2) -->
-      <remap from="cloud_in" to="$(arg robotname)/camera/depth/points" />
+      <remap from="cloud_in" to="/camera/depth/points" />
     </node>
-  </group>
 </launch>
