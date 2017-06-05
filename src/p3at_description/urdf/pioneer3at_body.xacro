@@ -10,7 +10,7 @@
   <link name="base_link">
     <inertial>
       <mass value="14.0"/>
-      <origin xyz="0 0 0.177"/>
+      <origin xyz="0 0 0.085"/>
       <inertia ixx="0.14711667" ixy="0.0" ixz="0.0"
         iyy="0.334951167" iyz="0.0"
         izz="0.3978345"/>
@@ -31,7 +31,7 @@
 
   <link name="p3at_front_left_wheel">
     <inertial>
-      <mass value="1.5"/>	
+      <mass value="1.5"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.005240625" ixy="0" ixz="0"
         iyy="0.005240625" iyz="0" izz="0.009075"/>
@@ -61,7 +61,7 @@
 
   <link name="p3at_front_right_wheel">
     <inertial>
-      <mass value="1.5"/>	
+      <mass value="1.5"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.005240625" ixy="0" ixz="0"
         iyy="0.005240625" iyz="0" izz="0.009075"/>
@@ -93,7 +93,7 @@
 
   <link name="p3at_rear_left_wheel">
     <inertial>
-      <mass value="1.5"/>	
+      <mass value="1.5"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.005240625" ixy="0" ixz="0"
         iyy="0.005240625" iyz="0" izz="0.009075"/>
@@ -123,7 +123,7 @@
 
   <link name="p3at_rear_right_wheel">
     <inertial>
-      <mass value="1.5"/>	
+      <mass value="1.5"/>
       <origin xyz="0 0 0"/>
       <inertia ixx="0.005240625" ixy="0" ixz="0"
         iyy="0.005240625" iyz="0" izz="0.009075"/>

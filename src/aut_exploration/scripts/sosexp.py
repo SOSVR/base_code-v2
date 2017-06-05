@@ -269,34 +269,36 @@ class ChoseBlock(smach.State):
     def Calculations(self):
         global GCostmap_data;
         global Odom_data;
+        map_res=GCostmap_data.info.resolution;
         local_variable =GCostmap_data;
         rospy.loginfo("ChoseBlock Calculations");
 
         lenght = local_variable.info.width ;
         lenght2 = local_variable.info.height ;
-        x = (Odom_data.pose.pose.position.x - local_variable.info.origin.position.x) * 10;
-        y = (Odom_data.pose.pose.position.y - local_variable.info.origin.position.y) * 10;
-        #we get the x and y of starting cell of the nine blocks as a whole
-        # sincd  pose and origin positions are in meters we have to multiply by 10 since we have 10 cells per a meter (resulotion of cost map 0.1)
-        if x < 275:
+        x = (Odom_data.pose.pose.position.x - local_variable.info.origin.position.x) /map_res;
+        y = (Odom_data.pose.pose.position.y - local_variable.info.origin.position.y) /map_res;
+        #we get the x and y of robot reletive to the starting x and y of map
+        # sincd  pose and origin positions are in meters we have to divide it by map_res since we have n cells per a meter (resulotion of cost map 1/n)
+        if x < (27.5/map_res):
             x_gc = 0;
-        elif x > lenght - 275:
-            x_gc = int(lenght - 275);
+        elif x > lenght - (27.5/map_res):
+            x_gc = int(lenght - (27.5/map_res));
         else:
-            x_gc = int(x) - 270;
-        if y < 275:
+            x_gc = int(x - (27/map_res));
+        if y < (27.5/map_res):
             y_gc = 0;
-        elif y > lenght2 - 275:
-            y_gc = int(lenght2 - 275);
+        elif y > lenght2 - (27.5/map_res):
+            y_gc = int(lenght2 - (27.5/map_res));
         else:
-            y_gc = int(y) - 270;
+            y_gc = int(y - (27/map_res));
+        #here we calculate the the x and the y of the starting cell  of the nine blocks as a whole
 
         Cell = [];
-        for i in range(0, 180):
+        for i in range(0, int(18/map_res)):
             #here we pick only the cells from the array of costmap that they fall inside the nine blocks
             # and because the array of costmap is in 1 deminsion i cant say data[i][j] instead i have to as follows
             Cell.extend(local_variable.data[(y_gc + i) * lenght:(1 + y_gc + i) * lenght]);
-            if i == 90 :
+            if i == int(9/map_res) :
                 # it is for debugging
                 print ("oh yeh");
                 print ((y_gc + i) * lenght);
@@ -313,9 +315,9 @@ class ChoseBlock(smach.State):
             return "conntact the master";
         else:
             #each block is 18 meter wide and long and x_gc and y_gc are the number of cells to the bottomLeft corner
-            #of block so we have to divide it by 10 because 1 meter means 10 cells with a resulotion of 0.1
-            cx = x_gc / 10.0 + (block_index % 3) * 18.0 + 9.0;
-            cy = y_gc / 10.0 + (int(block_index / 3)) * 18.0 + 9.0;
+            #of block so we have to multiply it by the map_res because 1 meter means n cells with a resulotion of 1/n
+            cx = x_gc *map_res + (block_index % 3) * 18.0 + 9.0;
+            cy = y_gc *map_res + (int(block_index / 3)) * 18.0 + 9.0;
             self.center = MyPoint(cx, cy);
             self.topLeft = MyPoint(cx - 7, cy + 7);
             self.topRight = MyPoint(cx + 7, cy + 7);
@@ -733,5 +735,6 @@ def main():
 if __name__ == '__main__':
     rospy.init_node('smach_example_state_machine');
     robot_name_space = rospy.get_param("namespace", default="sos1");
+    robot
     main();
     rospy.spin();
