@@ -18,7 +18,7 @@
   </include>
 
 
-  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base_exp.launch">
+  <include file="$(find setup)/launch/P3AT_launch_files/p3at_move_base.launch">
     <arg name="robotname" value="sos1"/>
   </include>
 

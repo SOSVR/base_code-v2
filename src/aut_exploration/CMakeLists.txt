@@ -84,8 +84,8 @@ add_executable(ltp src/Ls_to_pcl.cpp)
 target_link_libraries(ltp ${catkin_LIBRARIES})
 
 
-add_executable(victim_node src/distance_from_robot.cpp)
-target_link_libraries(victim_node ${catkin_LIBRARIES})
+#add_executable(victim_node src/distance_from_robot.cpp)
+#target_link_libraries(victim_node ${catkin_LIBRARIES})
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##

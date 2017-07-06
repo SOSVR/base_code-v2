@@ -23,7 +23,7 @@ import tf;
 import math;
 from visualization_msgs.msg import Marker;
 from visualization_msgs.msg import MarkerArray;
-from aut_exploration.msg import *;
+#from aut_exploration.msg import *;
 from aut_exploration.srv import *;
 from geometry_msgs.msg import *;
 from nav_msgs.msg import *;
@@ -735,6 +735,5 @@ def main():
 if __name__ == '__main__':
     rospy.init_node('smach_example_state_machine');
     robot_name_space = rospy.get_param("namespace", default="sos1");
-    robot
     main();
     rospy.spin();

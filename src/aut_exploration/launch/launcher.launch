@@ -5,19 +5,12 @@
   <group ns="sos1">
       <param name="namespace" value="sos1" />
     <node pkg="aut_exploration" type="sosexp.py" name="explore_client" output="screen">
-     
+
 
     </node>
 
 
   </group>
 
- <group ns="sos2">
-      <param name="namespace" value="sos2" />
-    <node pkg="aut_exploration" type="sosexp.py" name="explore_client" output="screen">
-   
-    </node>
-
-
-  </group>
+ 
 </launch>
