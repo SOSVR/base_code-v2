@@ -1,7 +1,7 @@
 SOSvr Base Code 2.0
 ---  
 
-*Please cite this [paper](http://www.google.com) if you use the code in your work.*
+*Please cite this [paper](https://pdfwww.gakkai-web.net/gakkai/inter/robocup2017symposium/contents/html/TDPs/rescue_sim_VRC/TDP-SOSVR-2017-final.pdf) if you use the code in your work.*
 [Taher Ahmadi](https://ceit.aut.ac.ir/~taher), [Sajad Azami](https://ceit.aut.ac.ir/~azami), [Seyed Mostafa Ahmadi](https://ceit.aut.ac.ir/~9431053), [Mohammad Hossein GohariNejad](https://ceit.aut.ac.ir/~9431019), [Alireza Torabian](https://ceit.aut.ac.ir/~9431032)
 
 
