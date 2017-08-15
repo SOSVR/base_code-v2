@@ -14,7 +14,7 @@ For setting up this robot refer to the **usage** section.
 ## Usage
 We assume you have an **Ubuntu 16.04** machine set up. Follow these steps to bring up the robot: 
 
-## Installing Ros Indigo
+## Installing Ros Kinetic
 First you have to install **ROS kinetic**:
 
 ### Set up your sources.list
@@ -107,7 +107,7 @@ but you still can't drive the robot unless you run:
 rqt --force-discover
 ```
 choose the "SOSVR Controller" from Plugins menu then select the robot1 and press play button.
-press A & X buttons at the same time for speed mode, now Enjoy your ride :)
+press A & X buttons at the same time for speed mode.
 
 
 
