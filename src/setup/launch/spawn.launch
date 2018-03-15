@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+
+  <include file="$(find setup)/launch/p3at_spawn.launch">
+    <arg name="robotname" value="robot1"/>
+    <arg name="initialy" value="-4"/>
+    <arg name="initialx" value="-46"/>
+  </include>
+
+
+
+
+
+</launch>

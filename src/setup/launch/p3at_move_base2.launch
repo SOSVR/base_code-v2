@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="robotname" default="sos1"/>
+
+  <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_$(arg robotname)">
+       <param name="target_frame_name" value="/map" />
+       <param name="source_frame_name" value="/$(arg robotname)/base_link" />
+        <remap from="/trajectory" to="/$(arg robotname)/trajectory" />
+  </node>
+
+
+  <group ns="$(arg robotname)">
+
+
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+      <rosparam file="$(find setup)/config/P3AT_navigation/param/costmap_common_params_pioneer.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find setup)/config/P3AT_navigation/param/costmap_common_params_pioneer.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find setup)/config/P3AT_navigation/param/local_costmap_params_pioneer.yaml" command="load" />
+      <rosparam file="$(find setup)/config/P3AT_navigation/param/global_costmap_params_pioneer.yaml" command="load" />
+      <rosparam file="$(find setup)/config/P3AT_navigation/param/base_local_planner_params.yaml" command="load" />
+
+      <!-- reset frame_id parameters using user input data -->
+      <param name="global_costmap/global_frame" value="/map"/>
+      <param name="global_costmap/robot_base_frame" value="base_link"/>
+      <param name="local_costmap/global_frame" value="odom"/>
+      <param name="local_costmap/robot_base_frame" value="base_link"/>
+      <param name="DWAPlannerROS/global_frame_id" value="odom"/>
+      <remap from="/cmd_vel" to="cmd_vel"/>
+      <remap from="scan" to="/$(arg robotname)/hokuyo" />
+    </node>
+  </group>
+</launch>

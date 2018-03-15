@@ -71,7 +71,7 @@
           </clip>
         </camera>
 
-        <plugin name="thermal_camera_controller" filename="libgazebo_ros_thermal_camera.so">
+        <plugin name="thermal_camera_controller" filename="package://hector_gazebo_thermal_camera/libgazebo_ros_thermal_camera_pink.so">
           <alwaysOn>true</alwaysOn>
           <updateRate>10</updateRate>
           <imageTopicName>${name}/image</imageTopicName>

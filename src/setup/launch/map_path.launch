@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<launch>
+
+
+
+  <group ns="robot1">
+      <param name="robot_name" value="robot1" />
+      <node pkg="setup" type="path.py" name="path" output="screen" />
+      <node pkg="setup" type="map_percent.py" name="map" output="screen" />
+  </group>
+
+  <group ns="robot2">
+      <param name="robot_name" value="robot2" />
+      <node pkg="setup" type="path.py" name="path" output="screen" />
+      <node pkg="setup" type="map_percent.py" name="map" output="screen" />
+  </group>
+
+
+
+
+  <group ns="robot0">
+      <param name="robot_name" value="robot0" />
+      <node pkg="setup" type="path.py" name="path" output="screen" />
+      <node pkg="setup" type="map_percent.py" name="map" output="screen" />
+  </group>
+
+
+  <group ns="robot3">
+      <param name="robot_name" value="robot3" />
+      <node pkg="setup" type="path.py" name="path" output="screen" />
+      <node pkg="setup" type="map_percent.py" name="map" output="screen" />
+  </group>
+
+
+
+
+  <group ns="global">
+      <param name="robot_name" value="global" />
+      <param name="global_map" value="global" />
+
+      <node pkg="setup" type="map_percent.py" name="map" output="screen" />
+  </group>
+
+
+
+</launch>

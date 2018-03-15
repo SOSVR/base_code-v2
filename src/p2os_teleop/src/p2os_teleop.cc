@@ -2,10 +2,10 @@
  * teleop_base
  * Copyright (c) 2008, Willow Garage, Inc.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright
@@ -14,7 +14,7 @@
  *     * Neither the name of the <ORGANIZATION> nor the names of its
  *       contributors may be used to endorse or promote products derived from
  *       this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,12 +35,12 @@
  *      it under the terms of the GNU General Public License as published by
  *       the Free Software Foundation; either version 2 of the License, or
  *       (at your option) any later version.
- *       
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *       
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -55,17 +55,18 @@
 #include <sensor_msgs/Joy.h>
 #include <geometry_msgs/Twist.h>
 
-class TeleopBase 
+class TeleopBase
 {
    public:
   geometry_msgs::Twist cmd, passthrough_cmd;
   double req_vx, req_vy, req_vw;
   double max_vx, max_vy, max_vw, max_vx_run, max_vy_run, max_vw_run;
   int axis_vx, axis_vy, axis_vw;
-  int deadman_button, run_button;
+  int deadman_button, run_button,rotate_button;
   bool deadman_no_publish_;
   bool deadman_;
   bool running_;
+  bool rotate_;
 
   ros::Time last_recieved_joy_message_time_;
   ros::Duration joy_msg_timeout_;
@@ -75,7 +76,7 @@ class TeleopBase
   ros::Subscriber joy_sub_;
   ros::Subscriber passthrough_sub_;
 
-  TeleopBase(bool deadman_no_publish = false) : max_vx(1.0), max_vy(0.5), max_vw(1.0), max_vx_run(1.5), max_vy_run(0.6), max_vw_run(1.8), deadman_no_publish_(deadman_no_publish), running_(false)
+  TeleopBase(bool deadman_no_publish = false) : max_vx(1.4), max_vy(0.5), max_vw(1.6), max_vx_run(2.4), max_vy_run(0.6), max_vw_run(2.4), deadman_no_publish_(deadman_no_publish), running_(false)
   { }
 
   void init()
@@ -84,7 +85,7 @@ class TeleopBase
         n_.param("max_vx", max_vx, max_vx);
         n_.param("max_vy", max_vy, max_vy);
         n_.param("max_vw", max_vw, max_vw);
-        
+
         // Set max speed while running
         n_.param("max_vx_run", max_vx_run, max_vx_run);
         n_.param("max_vy_run", max_vy_run, max_vy_run);
@@ -93,9 +94,11 @@ class TeleopBase
         n_.param("axis_vx", axis_vx, 3);
         n_.param("axis_vw", axis_vw, 0);
         n_.param("axis_vy", axis_vy, 2);
-        
+
         n_.param("deadman_button", deadman_button, 0);
         n_.param("run_button", run_button, 0);
+        n_.param("rotate_button", rotate_button, 0);
+
 
 	double joy_msg_timeout;
         n_.param("joy_msg_timeout", joy_msg_timeout, -1.0); //default to no timeout
@@ -113,27 +116,28 @@ class TeleopBase
         ROS_DEBUG("max_vx: %.3f m/s\n", max_vx);
         ROS_DEBUG("max_vy: %.3f m/s\n", max_vy);
         ROS_DEBUG("max_vw: %.3f deg/s\n", max_vw*180.0/M_PI);
-        
+
         ROS_DEBUG("max_vx_run: %.3f m/s\n", max_vx_run);
         ROS_DEBUG("max_vy_run: %.3f m/s\n", max_vy_run);
         ROS_DEBUG("max_vw_run: %.3f deg/s\n", max_vw_run*180.0/M_PI);
-        
+
         ROS_DEBUG("axis_vx: %d\n", axis_vx);
         ROS_DEBUG("axis_vy: %d\n", axis_vy);
         ROS_DEBUG("axis_vw: %d\n", axis_vw);
 
-        
+
         ROS_INFO("deadman_button: %d", deadman_button);
         ROS_INFO("run_button: %d", run_button);
+        ROS_INFO("rotate_button: %d", rotate_button);
         ROS_DEBUG("joy_msg_timeout: %f\n", joy_msg_timeout);
-        
+
         vel_pub_ = n_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
         passthrough_sub_ = n_.subscribe( "des_vel", 10, &TeleopBase::passthrough_cb, this );
         joy_sub_ = n_.subscribe("joy", 10, &TeleopBase::joy_cb, this);
 
- 
+
 	}
-  
+
 	~TeleopBase() {  }
 
 	void passthrough_cb( const geometry_msgs::TwistConstPtr& pass_msg )
@@ -144,12 +148,13 @@ class TeleopBase
 
     void joy_cb(const sensor_msgs::Joy::ConstPtr& joy_msg)
 	{
-        
-    deadman_ = (((unsigned int)deadman_button < joy_msg->buttons.size()) && joy_msg->buttons[deadman_button]);
 
-    if (!deadman_)
+    deadman_ = (((unsigned int)deadman_button < joy_msg->buttons.size()) && joy_msg->buttons[deadman_button]);
+    rotate_ =  (((unsigned int)rotate_button < joy_msg->buttons.size()) && joy_msg->buttons[rotate_button]);
+
+    if (!deadman_ && !rotate_)
     	return;
-		
+
 		//Record this message reciept
 		last_recieved_joy_message_time_ = ros::Time::now();
 
@@ -157,7 +162,7 @@ class TeleopBase
         running_ = (((unsigned int)run_button < joy_msg->buttons.size()) && joy_msg->buttons[run_button]);
     double vx = running_ ? max_vx_run : max_vx;
     double vy = running_ ? max_vy_run : max_vy;
-    double vw = running_ ? max_vw_run : max_vw;
+    double vw = (running_ || rotate_)? max_vw_run : max_vw;
 
     if((axis_vx >= 0) && (((unsigned int)axis_vx) < joy_msg->axes.size()))
     	req_vx = joy_msg->axes[axis_vx] * vx;
@@ -198,7 +203,19 @@ class TeleopBase
 
       cmd.angular.z = req_vw;
       vel_pub_.publish(cmd);
-         
+
+      fprintf(stdout,"teleop_base:: %f, %f, %f\n",cmd.linear.x,cmd.linear.y,cmd.angular.z);
+    }
+    else if(rotate_ &&
+                  last_recieved_joy_message_time_ + joy_msg_timeout_ > ros::Time::now() )
+    {
+
+
+       cmd.linear.x = 0;
+       cmd.linear.y = 0;
+      cmd.angular.z = req_vw;
+      vel_pub_.publish(cmd);
+
       fprintf(stdout,"teleop_base:: %f, %f, %f\n",cmd.linear.x,cmd.linear.y,cmd.angular.z);
     }
     else
@@ -239,7 +256,7 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "teleop_base");
 	ros::NodeHandle nh;
   const char* opt_no_publish    = "--deadman_no_publish";
-  
+
   bool no_publish = false;
   for(int i=1;i<argc;i++)
   {
@@ -251,14 +268,14 @@ int main(int argc, char **argv)
 
   TeleopBase teleop_base(no_publish);
   teleop_base.init();
-  
+
   while (ros::ok())
   {
-    ros::spinOnce(); 
+    ros::spinOnce();
     teleop_base.send_cmd_vel();
     pub_rate.sleep();
   }
-  
+
   exit(0);
   return 0;
 }

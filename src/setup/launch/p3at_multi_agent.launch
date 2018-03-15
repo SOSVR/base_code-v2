@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find setup)/launch/p3at_main.launch">
+    <arg name="robot_name" value="robot1"/>
+    <arg name="initial_x" value="-5"/>
+    <arg name="initial_y" value="-1"/>
+  </include>
+
+  <!--<include file="$(find setup)/launch/p3at_main.launch">
+    <arg name="robot_name" value="robot2"/>
+    <arg name="initial_x" value="16.5"/>
+    <arg name="initial_y" value="17"/>
+  </include>-->
+
+  <include file="$(find setup)/launch/p3at_main.launch">
+    <arg name="robot_name" value="robot3"/>
+    <arg name="initial_x" value="8"/>
+    <arg name="initial_y" value="-3.5"/>
+  </include>
+
+  <!--<include file="$(find setup)/launch/p3at_main.launch">
+    <arg name="robot_name" value="robot4"/>
+    <arg name="initial_x" value="-17"/>
+    <arg name="initial_y" value="17"/>
+  </include>-->
+
+
+</launch>

@@ -1,0 +1,15 @@
+local_costmap:
+   global_frame: odom
+   robot_base_frame: base_link
+   update_frequency: 5.0 # The frequency in Hz for the map to be updated.
+   publish_frequency: 10.0 # The frequency in Hz for the map to publish display information.
+   static_map: false
+   rolling_window: true
+   width: 10.0
+   height: 10.0
+   resolution: 0.025 #    The resolution of the map in meters/cell.
+
+   plugins:
+    - {name: obstacle_layer,      type: "costmap_2d::ObstacleLayer"}
+    #- {name: obstacle_layer,      type: "costmap_2d::VoxelLayer"}
+    - {name: inflation_layer,     type: "costmap_2d::InflationLayer"}
