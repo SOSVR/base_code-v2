@@ -10,7 +10,6 @@
   <xacro:include filename="$(find p3at_description)/urdf/pioneer3at_body.xacro"/>
   <xacro:include filename="$(find p3at_description)/urdf/hokuyo_utm30lx.urdf.xacro"/>
   <xacro:include filename="$(find p3at_description)/urdf/asus_camera.urdf.xacro" />
-  <xacro:include filename="$(find p3at_description)/urdf/thermal_camera.urdf.xacro" />
   <!--xacro:include filename="$(find p3at_description)/urdf/velodyne.urdf.xacro"/>
 <xacro:rotating_velodyne name="hokuyo" parent="base_link" ros_topic="hokuyo" update_rate="25" ray_count="360" min_angle="160" max_angle="-160" >
     <origin xyz="0.13 0 0.32" rpy="0 0 0"/>
@@ -26,7 +25,5 @@
 	                <origin xyz="0.065 0.0 0.45" rpy="0 0 0"/>
   </xacro:asus_camera>
 
-  <xacro:flir_a35_camera name="thermal" parent="base_link">
-                  <origin xyz="0.105 0.0 0.40" rpy="0 0 0"/>
-  </xacro:flir_a35_camera>
+
 </robot>
